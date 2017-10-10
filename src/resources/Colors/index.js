@@ -5,3 +5,4 @@ export const PUJWhite  = "#FFFFFF";
 export const PUJBlack  = "#000000";
 export const pureRed   = "#FF0000";
 export const lightGray = "#BCBCBC";
+export const superLightGray = '#FEFEFE';
