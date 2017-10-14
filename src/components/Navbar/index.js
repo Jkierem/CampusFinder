@@ -14,7 +14,17 @@ class Navbar extends React.Component{
 		this.props.onMenuClick()
 	}
 
+	renderContent = () => {
+		const { noButton } = this.props
+		if( noButton === true ){
+			return 'Menu Principal'
+		}else{
+			return 'CampusFinder'
+		}
+	}
+
 	render(){
+		const { noButton } = this.props
 		return(
 			<Menu
 				fixed="top"
@@ -23,12 +33,12 @@ class Navbar extends React.Component{
 				inverted
 				style={ navStyle }
 				>
-				<Menu.Item onClick={this.onMenu} >
-					<Icon name="content" />
-				</Menu.Item>
-				<Menu.Item>
-					CampusFinder
-				</Menu.Item>
+					{ !noButton && <Menu.Item onClick={this.onMenu} >
+						<Icon name="content" />
+					</Menu.Item>}
+					<Menu.Item>
+						{this.renderContent()}
+					</Menu.Item>
 			</Menu>
 		);
 	}

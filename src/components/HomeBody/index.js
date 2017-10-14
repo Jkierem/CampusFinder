@@ -1,45 +1,62 @@
 import React from 'react'
-import { Grid , Input , Button } from 'semantic-ui-react'
-import { test } from '../../resources/Styles'
-import PUJLabel from '../PUJLabel'
+import { Grid , Menu , Image , Icon } from 'semantic-ui-react'
+import * as Pages from '../../resources/Pages'
 
 class HomeBody extends React.Component{
 	constructor(props){
 		super(props);
-		this.state={
-			loading: false
-		}
+		this.state={}
 	}
 
-	onSearch = () => {
-		this.setState({
-			loading: !this.state.loading
-		})
+	onMenuItemClick = (e,{ id })=>{
+		this.props.onItemClick(id)
 	}
 
 	render(){
-		const { loading } = this.state;
 		return(
-			<div style={test}>
-				<Grid padded centered columns={1}>
-					<Grid.Row centered>
-						<Grid.Column textAlign="center">
-							<Input label={<PUJLabel content={"Origen"}/>}
-							/>
-						</Grid.Column>
-					</Grid.Row>
-					<Grid.Row centered>
-						<Grid.Column textAlign="center">
-							<Input label={<PUJLabel content={"Destino"}/>}/>
-						</Grid.Column>
-					</Grid.Row>
-					<Grid.Row centered>
-						<Grid.Column textAlign="center">
-							<Button content={"Buscar"} onClick={this.onSearch} loading={loading}/>
-						</Grid.Column>
-					</Grid.Row>
-				</Grid>
-			</div>
+			<Grid centered padded columns={16} >
+				<Grid.Row centered>
+					<Grid.Column width={14}>
+						<Image src='./logo-active.png'/>
+					</Grid.Column>
+				</Grid.Row>
+				<Grid.Row centered>
+					<Grid.Column width={14}>
+						<Menu vertical fluid >
+							<Menu.Item id={Pages.ROUTE} onClick={this.onMenuItemClick}>
+								<span>
+									<Icon name='map signs'/>
+									Calcular Ruta
+								</span>
+							</Menu.Item>
+							<Menu.Item id={Pages.SIGNIN} onClick={this.onMenuItemClick}>
+								<span>
+									<Icon name='user outline'/>
+									Iniciar Sesion
+								</span>
+							</Menu.Item>
+							<Menu.Item id={Pages.SEARCH} onClick={this.onMenuItemClick}>
+								<span>
+									<Icon name='search'/>
+									Buscar edificios
+								</span>
+							</Menu.Item>
+							<Menu.Item id={Pages.CALC} onClick={this.onMenuItemClick}>
+								<span>
+									<Icon name='calculator'/>
+									Calculadora de Notas
+								</span>
+							</Menu.Item>
+							<Menu.Item id={Pages.MAP} onClick={this.onMenuItemClick}>
+								<span>
+									<Icon name='map'/>
+									Ver Mapa
+								</span>
+							</Menu.Item>
+						</Menu>
+					</Grid.Column>
+				</Grid.Row>
+			</Grid>
 		);
 	}
 }

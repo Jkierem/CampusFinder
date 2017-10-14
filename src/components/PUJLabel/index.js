@@ -14,6 +14,7 @@ class PUJLabel extends React.Component{
 				content={this.props.content}
 				textColor={Colors.PUJWhite}
 				color={Colors.PUJYellow}
+				attached={this.props.attached}
 			/>
 		);
 	}

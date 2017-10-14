@@ -12,7 +12,9 @@ class StyledLabel extends React.Component{
 		return(
 			<Label
 				style={labelStyle(this.props.color,this.props.textColor)}
-				content={this.props.content}/>
+				content={this.props.content}
+				attached={this.props.attached}
+			/>
 		);
 	}
 }

@@ -1,41 +1,104 @@
 import React from 'react'
-import HomeBody from './components/HomeBody'
 import AppContainer from './components/AppContainer'
+import CalculatorBody from './components/CalculatorBody'
+import HomeBody from './components/HomeBody'
+import MapBody from './components/MapBody'
+import RouteBody from './components/RouteBody'
+import ProfileBody from './components/ProfileBody'
+import RegisterBody from './components/RegisterBody'
+import SearchBody from './components/SearchBody'
+import SignInBody from './components/SignInBody'
+import { commonBackground } from './resources/Styles'
+import * as Pages from './resources/Pages'
 
 class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			user: null
+			user: null,
+			page: Pages.HOME,
+			visible: false,
+			noButton: true
 		}
 	}
 
-	onSignIn = () =>{
+	onToggleMenu = () =>{
 		this.setState({
-			user: true
+			visible: !this.state.visible
 		})
 	}
 
-	onSignOut = () =>{
-		this.setState({
-			user: null
-		})
+	handleRegister = ( username ) =>{
+		this.setState({ username : username})
+		this.onMenuItemClick("Registro",Pages.REGISTER );
 	}
 
-	onProfile = () =>{
-		console.log("PROFILE!");
+	homeClick = ( id ) =>{
+		this.setState({
+			page: id,
+			noButton: false
+		})
+		console.log(this.state);
+	}
+
+	onMenuItemClick = (item,id) =>{
+		console.log(item)
+		if( id === Pages.SIGNOUT){
+			this.setState({
+				page : Pages.SIGNIN,
+				user : null,
+				noButton : false
+			})
+		}else{
+			this.setState({
+				page: id,
+				user: (item === "Iniciar Sesion")?true:null,
+				noButton : false
+			})
+			if( id !== Pages.REGISTER ){
+				this.onToggleMenu()
+			}
+		}
+	}
+
+	renderContent = () =>{
+		const { page , user , username } = this.state
+		switch (page) {
+			case Pages.HOME:
+				return(<HomeBody onItemClick={this.homeClick} />)
+			case Pages.ROUTE:
+				return(<RouteBody />)
+			case Pages.SIGNIN:
+				return(<SignInBody onRegister={this.handleRegister} />)
+			case Pages.CALC:
+				return(<CalculatorBody />)
+			case Pages.MAP:
+				return(<MapBody />)
+			case Pages.PROFILE:
+				return(<ProfileBody user={user} />)
+			case Pages.SEARCH:
+				return(<SearchBody/>)
+			case Pages.REGISTER:
+				return(<RegisterBody username={username} />)
+			default:
+				return(<HomeBody onItemClick={this.onMenuItemClick} />)
+		}
+
 	}
 
 	render(){
-		const { user } = this.state;
-		const { onSignIn , onProfile , onSignOut } = this;
+		const { user , visible , noButton } = this.state;
+		const { onMenuItemClick , onToggleMenu , renderContent } = this;
 		return(
 			<AppContainer
-				onSignIn={onSignIn}
-				onSignOut={onSignOut}
-				onProfile={onProfile}
-				user={user} >
-				<HomeBody />
+				onMenuItemClick={onMenuItemClick}
+				user={user}
+				visible={visible}
+				toggleMenu={onToggleMenu}
+				noButton={noButton} >
+				<div style={ commonBackground }>
+					{renderContent()}
+				</div>
 			</AppContainer>
 		);
 	}

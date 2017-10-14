@@ -14,7 +14,7 @@ export const containerStyle = {
 	margin: "0px"
 }
 
-export const test = {
+export const commonBackground = {
 	minHeight: getDeviceHeight() - 50,
 	minWidth: "100%",
 	paddingTop: 20,
