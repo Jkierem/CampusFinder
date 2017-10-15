@@ -28,7 +28,7 @@ class SearchBody extends React.Component{
 
 	render(){
 		return(
-			<Form>
+			<Form loading={this.state.loading}>
 				<Grid padded centered columns={16}>
 					<Grid.Row centered>
 						<Grid.Column textAlign='center' width={14} style={{maxWidth:350}}>

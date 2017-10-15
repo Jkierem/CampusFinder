@@ -17,11 +17,11 @@ class HomeBody extends React.Component{
 			<Grid centered padded columns={16} >
 				<Grid.Row centered>
 					<Grid.Column width={14}>
-						<Image src='./logo-active.png'/>
+						<Image centered src='./logo-active.png'/>
 					</Grid.Column>
 				</Grid.Row>
 				<Grid.Row centered>
-					<Grid.Column width={14}>
+					<Grid.Column width={14} style={{maxWidth: 350}}>
 						<Menu vertical fluid >
 							<Menu.Item id={Pages.ROUTE} onClick={this.onMenuItemClick}>
 								<span>
