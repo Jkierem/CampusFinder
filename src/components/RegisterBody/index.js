@@ -49,7 +49,7 @@ class RegisterBody extends React.Component{
 		console.log(process.env);
 		var SALT = process.env.REACT_APP_SALT
 		console.log(`${value}${SALT}`)
-		if( value !== '' ){
+		if( value !== '' && !value.includes(" ") ){
 			var hash = md5(`${value}${SALT}`)
 			this.setState({ [name]: hash })
 		}

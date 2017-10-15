@@ -2,6 +2,10 @@ export const isEmailAddress = (string) =>{
   return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(string)
 }
 
+export const isAlphaNumeric = (string) =>{
+  return /^[a-zA-Z0-9]+$/.test(string)
+}
+
 export const validateRegister = (values) =>{
   let errors = {};
   errors.valid = true;
@@ -17,6 +21,10 @@ export const validateRegister = (values) =>{
   }
   if( username !== undefined ){
     if( username.trim() === '' ){
+      errors.username = true
+      errors.valid = false
+    }
+    if( !isAlphaNumeric(username) ){
       errors.username = true
       errors.valid = false
     }
@@ -36,17 +44,8 @@ export const validateRegister = (values) =>{
     errors.password = true
     errors.valid = false
   }else{
-    if( password.trim() === '' ){
+    if( password.includes(" ") === true ){
       errors.password = true
-      errors.valid = false
-    }
-  }
-  if( passwordConfirm === undefined ){
-    errors.confirm = true
-    errors.valid = false
-  }else{
-    if( passwordConfirm.trim() === '' ){
-      errors.confirm = true
       errors.valid = false
     }
   }
