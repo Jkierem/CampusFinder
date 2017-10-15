@@ -1,6 +1,5 @@
 import React from 'react'
 import { Grid , Button, Form, Dropdown } from 'semantic-ui-react'
-import { buildings } from '../../resources/Buildings'
 
 class SearchBody extends React.Component{
 	constructor(props){
@@ -15,6 +14,12 @@ class SearchBody extends React.Component{
 	}
 
 	onSearch = () => {
+		let PORT = process.env.REACT_APP_PORT
+		let URL = process.env.REACT_APP_URL
+		console.log(`${URL}/buildings:${PORT}`);
+		/*fetch(`localhost:${PORT}`).then((value) => {
+			console.log(value);
+		})*/
 		this.setState({
 			loading: !this.state.loading
 		})
@@ -27,6 +32,7 @@ class SearchBody extends React.Component{
 	}
 
 	render(){
+		const { buildings } = this.props;
 		return(
 			<Form loading={this.state.loading}>
 				<Grid padded centered columns={16}>

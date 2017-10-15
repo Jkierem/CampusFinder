@@ -18,7 +18,8 @@ class App extends React.Component{
 			user: null,
 			page: Pages.HOME,
 			visible: false,
-			noButton: true
+			noButton: true,
+			buildings: this.props.buildings
 		}
 	}
 
@@ -62,12 +63,12 @@ class App extends React.Component{
 	}
 
 	renderContent = () =>{
-		const { page , user , username } = this.state
+		const { page , user , username , buildings } = this.state
 		switch (page) {
 			case Pages.HOME:
 				return(<HomeBody onItemClick={this.homeClick} />)
 			case Pages.ROUTE:
-				return(<RouteBody />)
+				return(<RouteBody buildings={buildings} />)
 			case Pages.SIGNIN:
 				return(<SignInBody onRegister={this.handleRegister} />)
 			case Pages.CALC:
@@ -77,7 +78,7 @@ class App extends React.Component{
 			case Pages.PROFILE:
 				return(<ProfileBody user={user} />)
 			case Pages.SEARCH:
-				return(<SearchBody/>)
+				return(<SearchBody buildings={buildings} />)
 			case Pages.REGISTER:
 				return(<RegisterBody username={username} />)
 			default:

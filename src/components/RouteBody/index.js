@@ -1,6 +1,5 @@
 import React from 'react'
 import { Grid , Dropdown , Button , Form } from 'semantic-ui-react'
-import { buildings } from '../../resources/Buildings'
 
 class RouteBody extends React.Component{
 	constructor(props){
@@ -28,6 +27,7 @@ class RouteBody extends React.Component{
 
 	render(){
 		const { loading } = this.state;
+		const { buildings } = this.props;
 		return(
 			<Form loading={loading}>
 				<Grid padded centered columns={16}>
