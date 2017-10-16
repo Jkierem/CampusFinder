@@ -74,6 +74,17 @@ class SignInBody extends React.Component{
 							/>
 						</Grid.Column>
 					</Grid.Row>
+					<Grid.Row centered>
+						<Grid.Column textAlign={"center"} width={14} style={{maxWidth: 350}}>
+							<PUJButton
+								label={"Olvide mi contraseña"}
+								color={PUJBlue}
+								textColor={PUJWhite}
+								onClick={this.handleSubmit}
+								fluid
+							/>
+						</Grid.Column>
+					</Grid.Row>
 				</Grid>
 			</Form>
 		);
