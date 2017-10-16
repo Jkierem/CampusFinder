@@ -42,25 +42,25 @@ class AppContainer extends React.Component{
 					onClick={onMenuItemClick}
 					key={Math.random()} />
 			)
+			items.push(
+				<PUJMenuItem
+					id={Pages.SEARCH}
+					name={"Buscar"}
+					icon={"search"}
+					onClick={onMenuItemClick}
+					key={Math.random()}/>
+			)
+			items.push(
+				<PUJMenuItem
+					id={Pages.ROUTE}
+					name={"Calcular Ruta"}
+					icon={"map signs"}
+					onClick={onMenuItemClick}
+					key={Math.random()}/>
+			)
 		}
 
 		//common options
-		items.push(
-			<PUJMenuItem
-				id={Pages.SEARCH}
-				name={"Buscar"}
-				icon={"search"}
-				onClick={onMenuItemClick}
-				key={Math.random()}/>
-		)
-		items.push(
-			<PUJMenuItem
-				id={Pages.ROUTE}
-				name={"Calcular Ruta"}
-				icon={"map signs"}
-				onClick={onMenuItemClick}
-				key={Math.random()}/>
-		)
 		items.push(
 			<PUJMenuItem
 				id={Pages.CALC}
@@ -94,15 +94,17 @@ class AppContainer extends React.Component{
 	}
 
 	render(){
-		const { visible , toggleMenu } = this.props
+		const { visible , toggleMenu , noButton } = this.props
 		return(
 			<div>
-				<Navbar onMenuClick={toggleMenu} noButton={this.props.noButton}/>
+				<Navbar onMenuClick={toggleMenu} noButton={noButton}/>
 				<div style={ containerStyle }>
 					<Sidebar.Pushable as={Segment}>
 		          <Sidebar
-								as={Menu} animation='overlay'
-								width='thin' visible={visible}
+								as={Menu}
+								animation='overlay'
+								width='thin'
+								visible={visible}
 								icon='labeled'
 								vertical borderless>
 								{this.renderMenu()}

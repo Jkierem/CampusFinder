@@ -23,22 +23,10 @@ class HomeBody extends React.Component{
 				<Grid.Row centered>
 					<Grid.Column width={14} style={{maxWidth: 350}}>
 						<Menu vertical fluid >
-							<Menu.Item id={Pages.ROUTE} onClick={this.onMenuItemClick}>
-								<span>
-									<Icon name='map signs'/>
-									Calcular Ruta
-								</span>
-							</Menu.Item>
 							<Menu.Item id={Pages.SIGNIN} onClick={this.onMenuItemClick}>
 								<span>
 									<Icon name='user outline'/>
 									Iniciar Sesion
-								</span>
-							</Menu.Item>
-							<Menu.Item id={Pages.SEARCH} onClick={this.onMenuItemClick}>
-								<span>
-									<Icon name='search'/>
-									Buscar edificios
 								</span>
 							</Menu.Item>
 							<Menu.Item id={Pages.CALC} onClick={this.onMenuItemClick}>

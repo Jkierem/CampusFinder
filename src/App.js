@@ -53,7 +53,7 @@ class App extends React.Component{
 		}else{
 			this.setState({
 				page: id,
-				user: (item === "Iniciar Sesion")?true:null,
+				user: (item === "Iniciar Sesion")?true:null, //TODO: change to user
 				noButton : false
 			})
 			if( id !== Pages.REGISTER ){
