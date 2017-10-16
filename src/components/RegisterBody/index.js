@@ -86,7 +86,7 @@ class RegisterBody extends React.Component{
 						<Grid.Column textAlign={'center'} width={14} style={{maxWidth: 350}}>
 							<Form.Field>
 								<Input
-									placeholder={'Nombre de Usuario'}
+									placeholder={'Nickname'}
 									onChange={this.handleChange}
 									name={"username"}
 									style={this.getErrorStyle(usernameError)}
