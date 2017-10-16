@@ -37,7 +37,7 @@ class AppContainer extends React.Component{
 			items.push(
 				<PUJMenuItem
 					id={Pages.PROFILE}
-					name={"Perfil"}
+					name={`Perfil ${user}`}
 					icon={"user outline"}
 					onClick={onMenuItemClick}
 					key={Math.random()} />
@@ -55,6 +55,22 @@ class AppContainer extends React.Component{
 					id={Pages.ROUTE}
 					name={"Calcular Ruta"}
 					icon={"map signs"}
+					onClick={onMenuItemClick}
+					key={Math.random()}/>
+			)
+			items.push(
+				<PUJMenuItem
+					id={Pages.FAVORITES}
+					name={"Ver Favoritos"}
+					icon={"star"}
+					onClick={onMenuItemClick}
+					key={Math.random()}/>
+			)
+			items.push(
+				<PUJMenuItem
+					id={Pages.SCHEDULE}
+					name={"Horario"}
+					icon={"calendar"}
 					onClick={onMenuItemClick}
 					key={Math.random()}/>
 			)

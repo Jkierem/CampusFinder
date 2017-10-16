@@ -14,9 +14,9 @@ class SearchBody extends React.Component{
 	}
 
 	onSearch = () => {
-		let PORT = process.env.REACT_APP_PORT
-		let URL = process.env.REACT_APP_URL
-		console.log(`${URL}/buildings:${PORT}`);
+		//let PORT = process.env.REACT_APP_PORT
+		//let URL = process.env.REACT_APP_URL
+		//console.log(`${URL}/buildings:${PORT}`);
 		/*fetch(`localhost:${PORT}`).then((value) => {
 			console.log(value);
 		})*/

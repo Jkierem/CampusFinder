@@ -72,7 +72,7 @@ class RegisterBody extends React.Component{
 
 		if( errors.valid === true ){
 			//TODO: call api
-			console.log("VALID")
+			//onsole.log("VALID")
 		}
 	}
 
@@ -87,6 +87,7 @@ class RegisterBody extends React.Component{
 							<Form.Field>
 								<Input
 									placeholder={'Nickname'}
+									defaultValue={this.props.username}
 									onChange={this.handleChange}
 									name={"username"}
 									style={this.getErrorStyle(usernameError)}

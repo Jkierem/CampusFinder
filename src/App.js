@@ -1,13 +1,16 @@
 import React from 'react'
 import AppContainer from './components/AppContainer'
 import CalculatorBody from './components/CalculatorBody'
+import FavoritesBody from './components/FavoritesBody'
 import HomeBody from './components/HomeBody'
 import MapBody from './components/MapBody'
 import RouteBody from './components/RouteBody'
 import ProfileBody from './components/ProfileBody'
 import RegisterBody from './components/RegisterBody'
+import ScheduleBody from './components/ScheduleBody'
 import SearchBody from './components/SearchBody'
 import SignInBody from './components/SignInBody'
+import UserhomeBody from './components/UserhomeBody'
 import { commonBackground } from './resources/Styles'
 import * as Pages from './resources/Pages'
 
@@ -39,11 +42,19 @@ class App extends React.Component{
 			page: id,
 			noButton: false
 		})
-		console.log(this.state);
+		//console.log(this.state);
+	}
+
+	onSuccessfulSignin = ( username ) =>{
+		this.setState({
+			user: username,
+			page: Pages.USERHOME,
+			noButton: true
+		})
 	}
 
 	onMenuItemClick = (item,id) =>{
-		console.log(item)
+		//console.log(item)
 		if( id === Pages.SIGNOUT){
 			this.setState({
 				page : Pages.SIGNIN,
@@ -53,7 +64,6 @@ class App extends React.Component{
 		}else{
 			this.setState({
 				page: id,
-				user: (item === "Iniciar Sesion")?true:null, //TODO: change to user
 				noButton : false
 			})
 			if( id !== Pages.REGISTER ){
@@ -70,7 +80,7 @@ class App extends React.Component{
 			case Pages.ROUTE:
 				return(<RouteBody buildings={buildings} />)
 			case Pages.SIGNIN:
-				return(<SignInBody onRegister={this.handleRegister} />)
+				return(<SignInBody onRegister={this.handleRegister} onSuccess={this.onSuccessfulSignin}/>)
 			case Pages.CALC:
 				return(<CalculatorBody />)
 			case Pages.MAP:
@@ -81,6 +91,12 @@ class App extends React.Component{
 				return(<SearchBody buildings={buildings} />)
 			case Pages.REGISTER:
 				return(<RegisterBody username={username} />)
+			case Pages.FAVORITES:
+				return(<FavoritesBody />)
+			case Pages.SCHEDULE:
+				return(<ScheduleBody />)
+			case Pages.USERHOME:
+				return(<UserhomeBody onItemClick={this.homeClick}/>)
 			default:
 				return(<HomeBody onItemClick={this.onMenuItemClick} />)
 		}

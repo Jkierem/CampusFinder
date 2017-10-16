@@ -3,6 +3,7 @@ import { Grid , Input , Form } from 'semantic-ui-react'
 import PUJButton from '../PUJButton'
 import PUJLabel from '../PUJLabel'
 import { PUJYellow , PUJBlue , PUJWhite } from '../../resources/Colors'
+import md5 from 'md5'
 
 class SignInBody extends React.Component{
 	constructor(props){
@@ -14,9 +15,34 @@ class SignInBody extends React.Component{
 		this.setState({ [name]: value })
 	}
 
+	handlePassword = ( e , {name , value}) =>{
+		var SALT = process.env.REACT_APP_SALT
+		if( value !== '' && !value.includes(" ") ){
+			var hash = md5(`${value}${SALT}`)
+			this.setState({ [name]: hash })
+		}
+	}
+
 	handleSubmit = (e) =>{
-		console.log(this.state);
+		//------- TODO: hard coded login remember to delete -----------
+		const { user , psswd } = this.state
+		if( user === "testFinder"){
+			var SECRET = process.env.REACT_APP_SECRET
+			if( psswd === SECRET ){
+				//console.log("SUCCESS");
+				this.props.onSuccess(user);
+			}else{
+				//console.log(`FAIL: pass=${SECRET} input=${psswd}`);
+			}
+		}else{
+			//console.log(`FAIL: user=testFinder input=${user}`);
+		}
+		//-------------------------------------------------------------
 		//TODO: Send POST to db to add user
+		e.preventDefault()
+	}
+
+	handleForgot = (e) =>{
 		e.preventDefault()
 	}
 
@@ -34,7 +60,7 @@ class SignInBody extends React.Component{
 						<Grid.Column textAlign={"center"} width={14} style={{maxWidth: 350}}>
 							<Form.Field>
 								<Input
-									label={<PUJLabel content={"Usuario"}/>}
+									label={<PUJLabel content={"Nickname"}/>}
 									fluid
 									onChange={this.handleChange}
 									name={"user"}
@@ -48,7 +74,7 @@ class SignInBody extends React.Component{
 								<Input
 									label={<PUJLabel content={"Contraseña"}/>}
 									fluid
-									onChange={this.handleChange}
+									onChange={this.handlePassword}
 									name={"psswd"}
 									type={"password"}
 								/>
@@ -80,7 +106,7 @@ class SignInBody extends React.Component{
 								label={"Olvide mi contraseña"}
 								color={PUJBlue}
 								textColor={PUJWhite}
-								onClick={this.handleSubmit}
+								onClick={this.handleForgot}
 								fluid
 							/>
 						</Grid.Column>
