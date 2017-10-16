@@ -47,14 +47,13 @@ class SignInBody extends React.Component{
 	}
 
 	handleRegister = (e) =>{
-		e.preventDefault();
 		this.setState({psswd : ""})
 		this.props.onRegister(this.state.user)
 	}
 
 	render(){
 		return(
-			<Form>
+			<Form onSubmit={this.handleSubmit}>
 				<Grid centered padded columns={16} >
 					<Grid.Row centered>
 						<Grid.Column textAlign={"center"} width={14} style={{maxWidth: 350}}>
@@ -84,20 +83,21 @@ class SignInBody extends React.Component{
 					<Grid.Row centered>
 						<Grid.Column textAlign={"center"} width={7} style={{maxWidth: 175}}>
 							<PUJButton
+								label={"Iniciar"}
+								color={PUJBlue}
+								textColor={PUJWhite}
+								onClick={this.handleSubmit}
+								type={"submit"}
+								fluid
+							/>
+						</Grid.Column>
+						<Grid.Column textAlign={"center"} width={7} style={{maxWidth: 175}}>
+							<PUJButton
 								label={"Registrar"}
 								color={PUJYellow}
 								textColor={PUJWhite}
 								onClick={this.handleRegister}
 								fluid/>
-						</Grid.Column>
-						<Grid.Column textAlign={"center"} width={7} style={{maxWidth: 175}}>
-							<PUJButton
-								label={"Iniciar"}
-								color={PUJBlue}
-								textColor={PUJWhite}
-								onClick={this.handleSubmit}
-								fluid
-							/>
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row centered>

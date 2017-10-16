@@ -32,6 +32,11 @@ class RouteBody extends React.Component{
 				<Grid.Row centered key={Math.random()}>
 					<Grid.Column textAlign="center" width={14}>
 						{route.nodes[i]}
+					</Grid.Column>
+				</Grid.Row>)
+				nodes.push(
+				<Grid.Row centered key={Math.random()}>
+					<Grid.Column textAlign="center" width={14}>
 						<Divider horizontal>O</Divider>
 					</Grid.Column>
 				</Grid.Row>)

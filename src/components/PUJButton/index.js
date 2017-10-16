@@ -9,13 +9,14 @@ class PUJButton extends React.Component{
 	}
 
 	render(){
-		const { label , color , onClick , textColor , fluid } = this.props
+		const { label , color , onClick , textColor , fluid , type } = this.props
 		return(
 			<Button
 				style={ labelStyle(color, textColor) }
 				content={label}
 				onClick={onClick}
 				fluid={fluid}
+				type={type}
 			/>
 		);
 	}
