@@ -13,7 +13,7 @@ class WorkingOnIt extends React.Component{
 				<Grid.Row centered>
 					<Grid.Column textAlign={'center'} width={14} style={{maxWidth: 350}}>
 						<Header size='huge'>
-							Trabajo en progeso
+							Trabajo en progreso
 						</Header>
 						<Icon name='wrench' size='huge'/>
 					</Grid.Column>
