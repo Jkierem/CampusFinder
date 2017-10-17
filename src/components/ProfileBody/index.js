@@ -1,4 +1,5 @@
 import React from 'react'
+import WorkingOnIt from '../WorkingOnIt'
 
 class ProfileBody extends React.Component{
 	constructor(props){
@@ -7,7 +8,7 @@ class ProfileBody extends React.Component{
 	}
 
 	render(){
-		return(<div/>);
+		return(<WorkingOnIt/>);
 	}
 }
 
