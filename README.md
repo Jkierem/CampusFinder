@@ -1,1 +1,1 @@
-# Campus Finder beta
+# Campus Finder
