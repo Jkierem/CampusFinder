@@ -4,14 +4,15 @@ import CalculatorBody from './components/CalculatorBody'
 import FavoritesBody from './components/FavoritesBody'
 import HomeBody from './components/HomeBody'
 import MapBody from './components/MapBody'
-import RouteBody from './components/RouteBody'
 import ProfileBody from './components/ProfileBody'
+import RouteBody from './components/RouteBody'
 import RegisterBody from './components/RegisterBody'
 import ScheduleBody from './components/ScheduleBody'
 import SearchBody from './components/SearchBody'
 import SignInBody from './components/SignInBody'
 import UserhomeBody from './components/UserhomeBody'
 import { commonBackground } from './resources/Styles'
+import { Route , Switch , Redirect , withRouter } from 'react-router-dom'
 import * as Pages from './resources/Pages'
 
 class App extends React.Component{
@@ -19,7 +20,6 @@ class App extends React.Component{
 		super(props);
 		this.state={
 			user: null,
-			page: Pages.HOME,
 			visible: false,
 			noButton: true,
 			buildings: this.props.buildings
@@ -37,75 +37,66 @@ class App extends React.Component{
 		this.onMenuItemClick("Registro",Pages.REGISTER );
 	}
 
-	homeClick = ( id ) =>{
-		this.setState({
-			page: id,
-			noButton: false
-		})
-		//console.log(this.state);
+	handleMenuButton = ( has ) =>{
+		this.setState({ noButton : has })
 	}
 
 	onSuccessfulSignin = ( username ) =>{
 		this.setState({
 			user: username,
-			page: Pages.USERHOME,
 			noButton: true
 		})
 	}
 
 	onMenuItemClick = (item,id) =>{
-		//console.log(item)
 		if( id === Pages.SIGNOUT){
 			this.setState({
-				page : Pages.SIGNIN,
 				user : null,
 				noButton : false
 			})
 		}else{
-			this.setState({
-				page: id,
-				noButton : false
-			})
 			if( id !== Pages.REGISTER ){
 				this.onToggleMenu()
 			}
 		}
+		this.props.history.push(id.path);
 	}
 
-	renderContent = () =>{
-		const { page , user , username , buildings } = this.state
-		switch (page) {
-			case Pages.HOME:
-				return(<HomeBody onItemClick={this.homeClick} />)
-			case Pages.ROUTE:
-				return(<RouteBody buildings={buildings} />)
-			case Pages.SIGNIN:
-				return(<SignInBody onRegister={this.handleRegister} onSuccess={this.onSuccessfulSignin}/>)
-			case Pages.CALC:
-				return(<CalculatorBody />)
-			case Pages.MAP:
-				return(<MapBody />)
-			case Pages.PROFILE:
-				return(<ProfileBody user={user} />)
-			case Pages.SEARCH:
-				return(<SearchBody buildings={buildings} />)
-			case Pages.REGISTER:
-				return(<RegisterBody username={username} />)
-			case Pages.FAVORITES:
-				return(<FavoritesBody />)
-			case Pages.SCHEDULE:
-				return(<ScheduleBody />)
-			case Pages.USERHOME:
-				return(<UserhomeBody onItemClick={this.homeClick}/>)
-			default:
-				return(<HomeBody onItemClick={this.onMenuItemClick} />)
+	conditionalRendering = () =>{
+		const { user , buildings , username } = this.state;
+		const { homeClick , handleRegister , onSuccessfulSignin , handleMenuButton } = this;
+		if( user == null ){
+			//paginas que se pueden ver si no estas loggeado
+			return (
+				<Switch>
+					<Route exact path='/home' render={ (props) => {return <HomeBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/inicio' render={ (props) => {return <SignInBody {...props} onRegister={handleRegister} onSuccess={onSuccessfulSignin} handleMenuButton={handleMenuButton} />} }/>
+					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} handleMenuButton={handleMenuButton} />} }/>
+					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>
+					<Route exact path='/registro' render={ (props) => {return <RegisterBody {...props} username={username} handleMenuButton={handleMenuButton} />} }/>
+					<Route render={ () => {return <Redirect to={'/home'}/>} }/>
+				</Switch>
+			)
+		}else{
+			//paginas con usuario loggeado
+			return(
+				<Switch>
+					<Route exact path='/home' render={ (props) => {return <UserhomeBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/perfil' render={ (props) => {return <ProfileBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/buscar' render={ (props) => {return <SearchBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/calcularRuta' render={ (props) => {return <RouteBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/favoritos' render={ (props) => {return <FavoritesBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/horario' render={ (props) => {return <ScheduleBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>
+					<Route render={ () => {return <Redirect to={'/home'}/>} }/>
+				</Switch>)
 		}
-
 	}
 
 	render(){
 		const { user , visible , noButton } = this.state;
-		const { onMenuItemClick , onToggleMenu , renderContent } = this;
+		const { onMenuItemClick , onToggleMenu , conditionalRendering } = this;
 		return(
 			<AppContainer
 				onMenuItemClick={onMenuItemClick}
@@ -114,11 +105,11 @@ class App extends React.Component{
 				toggleMenu={onToggleMenu}
 				noButton={noButton} >
 				<div style={ commonBackground }>
-					{renderContent()}
+					{conditionalRendering()}
 				</div>
 			</AppContainer>
 		);
 	}
 }
 
-export default App;
+export default withRouter(App);

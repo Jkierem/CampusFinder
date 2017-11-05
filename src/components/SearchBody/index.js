@@ -9,6 +9,10 @@ class SearchBody extends React.Component{
 		}
 	}
 
+	componentWillMount = () =>{
+		this.props.handleMenuButton(false)
+	}
+
 	handleChange = (e, { name, value }) => {
 		this.setState({ [name]: value })
 	}

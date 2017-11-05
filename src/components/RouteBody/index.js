@@ -10,6 +10,10 @@ class RouteBody extends React.Component{
 		}
 	}
 
+	componentWillMount = () =>{
+		this.props.handleMenuButton(false)
+	}
+
 	getSingleRoute = (route) =>{
 		var nodes = []
 		for (var i = 0; i < route.nodes.length; i++) {

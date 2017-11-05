@@ -16,6 +16,10 @@ class RegisterBody extends React.Component{
 			}
 		}
 	}
+	
+	componentWillMount = () =>{
+		this.props.handleMenuButton(false)
+	}
 
 	getErrorStyle = (error) =>{
 		if( error === true ){

@@ -7,6 +7,10 @@ class ProfileBody extends React.Component{
 		this.state={}
 	}
 
+	componentWillMount = () =>{
+		this.props.handleMenuButton(false)
+	}
+
 	render(){
 		return(<WorkingOnIt/>);
 	}

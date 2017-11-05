@@ -11,6 +11,10 @@ class SignInBody extends React.Component{
 		this.state={}
 	}
 
+	componentWillMount = () =>{
+		this.props.handleMenuButton(false)
+	}
+
 	handleChange = (e, { name, value }) => {
 		this.setState({ [name]: value })
 	}

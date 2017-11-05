@@ -8,7 +8,7 @@ import * as Pages from '../../resources/Pages'
 class AppContainer extends React.Component{
 	constructor(props){
 		super(props);
-		this.state={}
+		this.state={ redirect : false }
 	}
 
 	handlePusherClick = () =>{
@@ -18,9 +18,13 @@ class AppContainer extends React.Component{
 		}
 	}
 
+	handleMenuItemClick = (item,id) =>{
+		this.props.onMenuItemClick(item,id)
+	}
 
 	renderMenu = () =>{
-		const { user , onMenuItemClick } = this.props;
+		const { user } = this.props;
+		const { handleMenuItemClick } = this;
 		let items = []
 
 		if( user === null ){
@@ -29,7 +33,7 @@ class AppContainer extends React.Component{
 					id={Pages.SIGNIN}
 					name={"Iniciar Sesion"}
 					icon={"user outline"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()}
 				/>
 			)
@@ -39,7 +43,7 @@ class AppContainer extends React.Component{
 					id={Pages.PROFILE}
 					name={`Perfil ${user}`}
 					icon={"user outline"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()} />
 			)
 			items.push(
@@ -47,7 +51,7 @@ class AppContainer extends React.Component{
 					id={Pages.SEARCH}
 					name={"Buscar"}
 					icon={"search"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()}/>
 			)
 			items.push(
@@ -55,7 +59,7 @@ class AppContainer extends React.Component{
 					id={Pages.ROUTE}
 					name={"Calcular Ruta"}
 					icon={"map signs"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()}/>
 			)
 			items.push(
@@ -63,7 +67,7 @@ class AppContainer extends React.Component{
 					id={Pages.FAVORITES}
 					name={"Ver Favoritos"}
 					icon={"star"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()}/>
 			)
 			items.push(
@@ -71,7 +75,7 @@ class AppContainer extends React.Component{
 					id={Pages.SCHEDULE}
 					name={"Horario"}
 					icon={"calendar"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()}/>
 			)
 		}
@@ -82,7 +86,7 @@ class AppContainer extends React.Component{
 				id={Pages.CALC}
 				name={"Calculadora de Notas"}
 				icon={"calculator"}
-				onClick={onMenuItemClick}
+				onClick={handleMenuItemClick}
 				key={Math.random()}/>
 		)
 		items.push(
@@ -90,7 +94,7 @@ class AppContainer extends React.Component{
 				id={Pages.MAP}
 				name={"Ver Mapa"}
 				icon={"map"}
-				onClick={onMenuItemClick}
+				onClick={handleMenuItemClick}
 				key={Math.random()}/>
 		)
 		//end common
@@ -101,7 +105,7 @@ class AppContainer extends React.Component{
 					id={Pages.SIGNOUT}
 					name={"Cerrar Sesion"}
 					icon={"log out"}
-					onClick={onMenuItemClick}
+					onClick={handleMenuItemClick}
 					key={Math.random()}/>
 			)
 		}
@@ -112,27 +116,27 @@ class AppContainer extends React.Component{
 	render(){
 		const { visible , toggleMenu , noButton } = this.props
 		return(
-			<div>
-				<Navbar onMenuClick={toggleMenu} noButton={noButton}/>
-				<div style={ containerStyle }>
-					<Sidebar.Pushable as={Segment}>
-		          <Sidebar
-								as={Menu}
-								animation='overlay'
-								width='thin'
-								visible={visible}
-								icon='labeled'
-								vertical borderless>
-								{this.renderMenu()}
-		          </Sidebar>
-		          <Sidebar.Pusher dimmed={visible} onClick={this.handlePusherClick}>
-								{this.props.children}
-		          </Sidebar.Pusher>
-		        </Sidebar.Pushable>
-				</div>
-			</div>
-		);
+				<div>
+					<Navbar onMenuClick={toggleMenu} noButton={noButton}/>
+					<div style={ containerStyle }>
+						<Sidebar.Pushable as={Segment}>
+			          <Sidebar
+									as={Menu}
+									animation='overlay'
+									width='thin'
+									visible={visible}
+									icon='labeled'
+									vertical borderless>
+									{this.renderMenu()}
+			          </Sidebar>
+			          <Sidebar.Pusher dimmed={visible} onClick={this.handlePusherClick}>
+									{this.props.children}
+			          </Sidebar.Pusher>
+			        </Sidebar.Pushable>
+					</div>
+				</div>);
 	}
 }
+
 
 export default AppContainer;
