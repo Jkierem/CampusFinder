@@ -9,6 +9,20 @@ const getDeviceHeight = () =>{
 	return height;
 }
 
+export const getErrorStyle = (error) =>{
+	if( error === true ){
+		return{
+			border: `1px solid rgba(255,0,0,1)`,
+			borderRadius: '.28571429rem'
+		}
+	}else{
+		return{
+			border: 'none',
+			borderRadius: '.28571429rem'
+		}
+	}
+}
+
 export const containerStyle = {
 	paddingTop: "45px",
 	margin: "0px"
@@ -29,5 +43,14 @@ export const labelStyle = (bcolor , textColor=Colors.PUJBlack) =>{
 	return {
 		backgroundColor: bcolor,
 		color: textColor
+	}
+}
+
+export const fabStyle = (color,left='80vw',top='78vh') =>{
+	return{
+		position: 'fixed',
+		backgroundColor: color,
+		left: left,
+		top: top
 	}
 }

@@ -38,54 +38,54 @@ export const validateRegister = (values) =>{
   const { name , username , email , password , passwordConfirm } = values
   if( name !== undefined ){
     if( name.trim() === '' ){
-      errors.name = true
+      errors.name = "El Nombre no puede estar vacío"
       errors.valid = false
     }
     if( name.includes(" ") ){
       var toks = name.split(" ");
       for (var i = 0; i < toks.length; i++) {
         if( !isName(toks[i]) ){
-          errors.name = true
+          errors.name = "El nombre no debe contener caracteres especiales"
           errors.valid = false
         }
       }
     }else{
       if( !isName(name) ){
-        errors.name = true
+        errors.name = "El nombre no debe contener caracteres especiales"
         errors.valid = false
       }
     }
   }else{
-    errors.name = true
+    errors.name = "El Nombre no puede estar vacío"
     errors.valid = false
   }
   if( username !== undefined ){
     if( username.trim() === '' ){
-      errors.username = true
+      errors.username = "El nickname no puede estar vacío"
       errors.valid = false
     }
     if( !isAlphaNumeric(username) ){
-      errors.username = true
+      errors.username = "El nickname no puede tener caracteres especiales"
       errors.valid = false
     }
   }else{
-    errors.username = true
+    errors.username = "Nickname no puede estar vacio"
     errors.valid = false
   }
   if( !isEmailAddress(email) ){
-    errors.email = true
+    errors.email = "Correo electronico no es valido"
     errors.valid = false
   }
   if( password !== passwordConfirm ){
-    errors.confirm = true
+    errors.confirm = "Las contraseñas no coinciden"
     errors.valid = false
   }
   if( password === undefined ){
-    errors.password = true
+    errors.password = "Contraseña no puede estar vacía"
     errors.valid = false
   }else{
     if( password.includes(" ") === true ){
-      errors.password = true
+      errors.password = "Contraseña no debe contener espacios"
       errors.valid = false
     }
   }

@@ -1,9 +1,11 @@
 import React from 'react'
 import PUJButton from '../PUJButton'
+import ErrorText from '../ErrorText'
 import { Grid , Form , Input } from 'semantic-ui-react'
 import { PUJBlue , PUJWhite } from '../../resources/Colors'
 import { validateRegister } from '../../resources/FormValidation'
-import md5 from 'md5'
+import { registerUser , checkNickname } from '../../resources/Database'
+import { getErrorStyle } from '../../resources/Styles'
 
 class RegisterBody extends React.Component{
 	constructor(props){
@@ -16,45 +18,32 @@ class RegisterBody extends React.Component{
 			}
 		}
 	}
-	
+
 	componentWillMount = () =>{
 		this.props.handleMenuButton(false)
 	}
 
-	getErrorStyle = (error) =>{
-		if( error === true ){
-			return{
-				border: `1px solid rgba(255,0,0,1)`,
-				borderRadius: '.28571429rem'
-			}
-		}else{
-			return{
-				border: 'none',
-				borderRadius: '.28571429rem'
-			}
-		}
-	}
-
 	checkInputs = () =>{
 		var errors = validateRegister(this.state)
-		this.setState({
-			errors:{
-				nameError: (errors.name)?true:false,
-				usernameError: (errors.username)?true:false,
-				emailError: (errors.email)?true:false,
-				passError: (errors.password)?true:false,
-				confirmError: (errors.confirm)?true:false
-			}
-		})
+		this.updateErrors(errors)
 		return errors;
 	}
 
-	handlePassword = ( e , {name , value}) =>{
-		var SALT = process.env.REACT_APP_SALT
-		if( value !== '' && !value.includes(" ") ){
-			var hash = md5(`${value}${SALT}`)
-			this.setState({ [name]: hash })
-		}
+	updateErrors = (errors) =>{
+		this.setState({
+			errors:{
+				nameError: (errors.name)?true:false,
+				nameErrorText: (errors.name)?errors.name:undefined,
+				usernameError: (errors.username)?true:false,
+				usernameErrorText: (errors.username)?errors.username:undefined,
+				emailError: (errors.email)?true:false,
+				emailErrorText: (errors.email)?errors.email:undefined,
+				passError: (errors.password)?true:false,
+				passErrorText: (errors.password)?errors.password:undefined,
+				confirmError: (errors.confirm)?true:false,
+				confirmErrorText: (errors.confirm)?errors.confirm:undefined
+			}
+		})
 	}
 
 	handleChange = (e, { name, value }) => {
@@ -63,26 +52,46 @@ class RegisterBody extends React.Component{
 
 	onSubmit = () => {
 		this.setState({
-			loading: !this.state.loading,
+			loading: true,
 			pristine: false
 		})
-		window.setTimeout(()=>{
-			this.setState({
-				loading: !this.state.loading
-			})
-		},1000)
 
 		var errors = this.checkInputs();
+		checkNickname(this.state.username).then((json) => {
 
-		if( errors.valid === true ){
-			//TODO: call api
-			//onsole.log("VALID")
-		}
+			if( json.response === true ){
+				errors.username = "Nickname ya esta en uso"
+				errors.valid = false
+			}
+			this.updateErrors(errors)
+			if( errors.valid === true ){
+
+				const { username: nickname , name: fullname, email, password } = this.state
+
+				registerUser( fullname , nickname , email , password ).then((json) => {
+					this.setState({
+						loading: false,
+						pristine: false
+					})
+					if(json.response === true ){
+						this.props.onSuccess(json.user.nickname)
+					}else{
+						alert("error de registro")
+					}
+				})
+			}
+
+		})
+
+		this.setState({
+			loading: false,
+			pristine: false
+		})
 	}
 
 	render(){
 		const { nameError , usernameError , emailError , passError , confirmError } = this.state.errors
-
+		const { nameErrorText , usernameErrorText , emailErrorText , passErrorText , confirmErrorText } = this.state.errors
 		return(
 			<Form loading={this.state.loading}>
 				<Grid centered padded columns={16} >
@@ -94,8 +103,9 @@ class RegisterBody extends React.Component{
 									defaultValue={this.props.username}
 									onChange={this.handleChange}
 									name={"username"}
-									style={this.getErrorStyle(usernameError)}
+									style={getErrorStyle(usernameError)}
 								/>
+								{ usernameError && <ErrorText text={usernameErrorText}/> }
 							</Form.Field>
 						</Grid.Column>
 					</Grid.Row>
@@ -107,8 +117,9 @@ class RegisterBody extends React.Component{
 									placeholder={'Nombre Completo'}
 									onChange={this.handleChange}
 									name={"name"}
-									style={this.getErrorStyle(nameError)}
+									style={getErrorStyle(nameError)}
 								/>
+								{ nameError && <ErrorText text={nameErrorText} />}
 							</Form.Field>
 						</Grid.Column>
 					</Grid.Row>
@@ -120,8 +131,9 @@ class RegisterBody extends React.Component{
 									placeholder={'Correo Electronico'}
 									onChange={this.handleChange}
 									name={"email"}
-									style={this.getErrorStyle(emailError)}
+									style={getErrorStyle(emailError)}
 								/>
+								{ emailError && <ErrorText text={emailErrorText} /> }
 							</Form.Field>
 						</Grid.Column>
 					</Grid.Row>
@@ -131,11 +143,12 @@ class RegisterBody extends React.Component{
 							<Form.Field>
 								<Input
 									placeholder={'Contraseña'}
-									onChange={this.handlePassword}
+									onChange={this.handleChange}
 									name={"password"}
 									type={'password'}
-									style={this.getErrorStyle(passError)}
+									style={getErrorStyle(passError)}
 								/>
+								{ passError && <ErrorText text={passErrorText} /> }
 							</Form.Field>
 						</Grid.Column>
 					</Grid.Row>
@@ -145,11 +158,12 @@ class RegisterBody extends React.Component{
 							<Form.Field>
 								<Input
 									placeholder={'Confirmar Contraseña'}
-									onChange={this.handlePassword}
+									onChange={this.handleChange}
 									name={"passwordConfirm"}
 									type={'password'}
-									style={this.getErrorStyle(confirmError)}
+									style={getErrorStyle(confirmError)}
 								/>
+								{ confirmError && <ErrorText text={confirmErrorText} />}
 							</Form.Field>
 						</Grid.Column>
 					</Grid.Row>

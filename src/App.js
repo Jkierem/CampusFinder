@@ -41,9 +41,9 @@ class App extends React.Component{
 		this.setState({ noButton : has })
 	}
 
-	onSuccessfulSignin = ( username ) =>{
+	onSuccessfulSignin = ( user ) =>{
 		this.setState({
-			user: username,
+			user: user,
 			noButton: true
 		})
 	}
@@ -64,7 +64,7 @@ class App extends React.Component{
 
 	conditionalRendering = () =>{
 		const { user , buildings , username } = this.state;
-		const { homeClick , handleRegister , onSuccessfulSignin , handleMenuButton } = this;
+		const { handleRegister , onSuccessfulSignin , handleMenuButton } = this;
 		if( user == null ){
 			//paginas que se pueden ver si no estas loggeado
 			return (
@@ -73,7 +73,7 @@ class App extends React.Component{
 					<Route exact path='/inicio' render={ (props) => {return <SignInBody {...props} onRegister={handleRegister} onSuccess={onSuccessfulSignin} handleMenuButton={handleMenuButton} />} }/>
 					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} handleMenuButton={handleMenuButton} />} }/>
 					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>
-					<Route exact path='/registro' render={ (props) => {return <RegisterBody {...props} username={username} handleMenuButton={handleMenuButton} />} }/>
+					<Route exact path='/registro' render={ (props) => {return <RegisterBody {...props} username={username} handleMenuButton={handleMenuButton} onSuccess={onSuccessfulSignin}/>} }/>
 					<Route render={ () => {return <Redirect to={'/home'}/>} }/>
 				</Switch>
 			)

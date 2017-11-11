@@ -1,5 +1,5 @@
 import React from 'react'
-import WorkingOnIt from '../WorkingOnIt'
+import FAB from '../FAB'
 
 class ScheduleBody extends React.Component{
 	constructor(props){
@@ -12,7 +12,7 @@ class ScheduleBody extends React.Component{
 	}
 
 	render(){
-		return(<WorkingOnIt/>);
+		return(<FAB/>);
 	}
 }
 

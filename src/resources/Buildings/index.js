@@ -101,8 +101,8 @@ export const findBuildingID = (building) =>{
 
 export const getBuildings = () =>{
 	var URL  = process.env.REACT_APP_URL
-	var PORT = process.env.REACT_APP_PORT
-	fetch( `${URL}/buildings:${PORT}`,{method: 'GET'}).then((value) => {
+	var PORT = process.env.REACT_APP_DB_PORT
+	fetch( `${URL}:${PORT}/buildings`,{method: 'GET'}).then((value) => {
 		console.log(value);
 	})
 }

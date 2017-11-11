@@ -2,13 +2,17 @@ import React from 'react'
 import { Grid , Input , Form } from 'semantic-ui-react'
 import PUJButton from '../PUJButton'
 import PUJLabel from '../PUJLabel'
+import ErrorText from '../ErrorText'
 import { PUJYellow , PUJBlue , PUJWhite } from '../../resources/Colors'
-import md5 from 'md5'
+import { authenticateUser } from '../../resources/Database'
+import { getErrorStyle } from '../../resources/Styles'
 
 class SignInBody extends React.Component{
 	constructor(props){
 		super(props);
-		this.state={}
+		this.state={
+			loading: false
+		}
 	}
 
 	componentWillMount = () =>{
@@ -16,34 +20,28 @@ class SignInBody extends React.Component{
 	}
 
 	handleChange = (e, { name, value }) => {
-		this.setState({ [name]: value })
-	}
-
-	handlePassword = ( e , {name , value}) =>{
-		var SALT = process.env.REACT_APP_SALT
-		if( value !== '' && !value.includes(" ") ){
-			var hash = md5(`${value}${SALT}`)
-			this.setState({ [name]: hash })
-		}
+		this.setState({ [name]: value , error: false, errorText:''})
 	}
 
 	handleSubmit = (e) =>{
-		//------- TODO: hard coded login remember to delete -----------
-		const { user , psswd } = this.state
-		if( user === "testFinder"){
-			var SECRET = process.env.REACT_APP_SECRET
-			if( psswd === SECRET ){
-				//console.log("SUCCESS");
-				this.props.onSuccess(user);
-			}else{
-				//console.log(`FAIL: pass=${SECRET} input=${psswd}`);
-			}
-		}else{
-			//console.log(`FAIL: user=testFinder input=${user}`);
-		}
-		//-------------------------------------------------------------
-		//TODO: Send POST to db to add user
 		e.preventDefault()
+		const { user , psswd } = this.state
+		this.setState({
+			loading: true
+		})
+		authenticateUser(user,psswd).then((attemp) => {
+			this.setState({
+				loading: false
+			})
+			if( attemp.response === true ){
+				this.props.onSuccess(attemp.user.nickname);
+			}else{
+				this.setState({
+					error: true,
+					errorText: "Combinacion de usuario y contraseña invalida"
+				})
+			}
+		})
 	}
 
 	handleForgot = (e) =>{
@@ -57,7 +55,7 @@ class SignInBody extends React.Component{
 
 	render(){
 		return(
-			<Form onSubmit={this.handleSubmit}>
+			<Form onSubmit={this.handleSubmit} loading={this.state.loading}>
 				<Grid centered padded columns={16} >
 					<Grid.Row centered>
 						<Grid.Column textAlign={"center"} width={14} style={{maxWidth: 350}}>
@@ -67,6 +65,7 @@ class SignInBody extends React.Component{
 									fluid
 									onChange={this.handleChange}
 									name={"user"}
+									style={getErrorStyle(this.state.error)}
 								/>
 							</Form.Field>
 						</Grid.Column>
@@ -77,10 +76,12 @@ class SignInBody extends React.Component{
 								<Input
 									label={<PUJLabel content={"Contraseña"}/>}
 									fluid
-									onChange={this.handlePassword}
+									onChange={this.handleChange}
 									name={"psswd"}
 									type={"password"}
+									style={getErrorStyle(this.state.error)}
 								/>
+								{ this.state.error && <ErrorText text={this.state.errorText} />}
 							</Form.Field>
 						</Grid.Column>
 					</Grid.Row>
