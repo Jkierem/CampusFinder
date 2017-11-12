@@ -14,7 +14,8 @@ class RegisterBody extends React.Component{
 			errors:{
 				emailError: false,
 				confirmError: false,
-				pristine: true
+				pristine: true,
+				username: this.props.username
 			}
 		}
 	}

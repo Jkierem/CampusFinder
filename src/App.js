@@ -48,12 +48,20 @@ class App extends React.Component{
 		})
 	}
 
+	onDeleteUser = () =>{
+		this.setState({
+			user : null,
+			noButton : false
+		})
+	}
+
 	onMenuItemClick = (item,id) =>{
 		if( id === Pages.SIGNOUT){
 			this.setState({
 				user : null,
 				noButton : false
 			})
+			this.onToggleMenu()
 		}else{
 			if( id !== Pages.REGISTER ){
 				this.onToggleMenu()
@@ -82,7 +90,7 @@ class App extends React.Component{
 			return(
 				<Switch>
 					<Route exact path='/home' render={ (props) => {return <UserhomeBody {...props} handleMenuButton={handleMenuButton}/>} }/>
-					<Route exact path='/perfil' render={ (props) => {return <ProfileBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/perfil' render={ (props) => {return <ProfileBody {...props} user={user} handleMenuButton={handleMenuButton} onDelete={this.onDeleteUser}/>} }/>
 					<Route exact path='/buscar' render={ (props) => {return <SearchBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/calcularRuta' render={ (props) => {return <RouteBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/favoritos' render={ (props) => {return <FavoritesBody {...props} handleMenuButton={handleMenuButton}/>} }/>

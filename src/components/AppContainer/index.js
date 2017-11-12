@@ -119,7 +119,7 @@ class AppContainer extends React.Component{
 				<div>
 					<Navbar onMenuClick={toggleMenu} noButton={noButton}/>
 					<div style={ containerStyle }>
-						<Sidebar.Pushable as={Segment}>
+						<Sidebar.Pushable as={Segment} style={{boxShadow: "none", border: "none"}}>
 			          <Sidebar
 									as={Menu}
 									animation='overlay'

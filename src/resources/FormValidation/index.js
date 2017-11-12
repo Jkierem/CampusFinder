@@ -91,3 +91,18 @@ export const validateRegister = (values) =>{
   }
   return errors
 }
+
+export const validatePasswordChange = (values) => {
+  let errors = {}
+  errors.valid = true
+  const { newPassword , confirmPassword } = values
+  if( newPassword !== confirmPassword ){
+    errors.confirmPassword = "Las contraseñas no coinciden"
+    errors.valid = false
+  }
+  if( newPassword.includes(" ") === true ){
+    errors.newPassword = "Contraseña no debe contener espacios"
+    errors.valid = false
+  }
+  return errors;
+}
