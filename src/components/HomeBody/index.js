@@ -31,7 +31,7 @@ class HomeBody extends React.Component{
 				<Grid centered padded columns={16} >
 					<Grid.Row centered>
 						<Grid.Column width={14}>
-							<Image centered src='./logo-active.png'/>
+							<Image centered src='./logo_campus_finder.svg'/>
 						</Grid.Column>
 					</Grid.Row>
 					<Grid.Row centered>

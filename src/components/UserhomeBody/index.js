@@ -31,7 +31,7 @@ class UserhomeBody extends React.Component{
 			<Grid centered padded columns={16} >
 				<Grid.Row centered>
 					<Grid.Column width={14}>
-						<Image centered src='./logo-active.png' style={{maxHeight: 100}}/>
+						<Image centered src='./logo_campus_finder.svg' style={{maxHeight: 100}}/>
 					</Grid.Column>
 				</Grid.Row>
 				<Grid.Row centered>
