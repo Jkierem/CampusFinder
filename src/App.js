@@ -3,6 +3,7 @@ import AppContainer from './components/AppContainer'
 import CalculatorBody from './components/CalculatorBody'
 import FavoritesBody from './components/FavoritesBody'
 import HomeBody from './components/HomeBody'
+import LimitedCalculatorBody from './components/LimitedCalculatorBody'
 import MapBody from './components/MapBody'
 import ProfileBody from './components/ProfileBody'
 import RouteBody from './components/RouteBody'
@@ -79,7 +80,7 @@ class App extends React.Component{
 				<Switch>
 					<Route exact path='/home' render={ (props) => {return <HomeBody {...props} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/inicio' render={ (props) => {return <SignInBody {...props} onRegister={handleRegister} onSuccess={onSuccessfulSignin} handleMenuButton={handleMenuButton} />} }/>
-					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} handleMenuButton={handleMenuButton} />} }/>
+					<Route exact path='/calculadora' render={ (props) => {return <LimitedCalculatorBody {...props} handleMenuButton={handleMenuButton} />} }/>
 					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>
 					<Route exact path='/registro' render={ (props) => {return <RegisterBody {...props} username={username} handleMenuButton={handleMenuButton} onSuccess={onSuccessfulSignin}/>} }/>
 					<Route render={ () => {return <Redirect to={'/home'}/>} }/>

@@ -1,5 +1,5 @@
 import React from 'react'
-import WorkingOnIt from '../WorkingOnIt'
+import { Image } from 'semantic-ui-react'
 
 class MapBody extends React.Component{
 	constructor(props){
@@ -10,9 +10,15 @@ class MapBody extends React.Component{
 	componentWillMount = () =>{
 		this.props.handleMenuButton(false)
 	}
-	
+
 	render(){
-		return(<WorkingOnIt/>);
+		return(
+			<Image
+				centered
+				size='huge'
+				src='./mapa.jpg'
+			/>
+		);
 	}
 }
 
