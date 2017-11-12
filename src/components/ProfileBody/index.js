@@ -132,12 +132,13 @@ class ProfileBody extends React.Component{
 					this.setState({
 						currentPasswordError:false
 					})
-					updateUser( user._id , null , newPassword).then((json) => {
+					updateUser( user._id , undefined , newPassword).then((json) => {
 						if(json.response === true){
 							this.closePwModal()
 							this.openUpdateModal()
 						}else{
-							alert("Error al actualizar contraseña")
+							alert(`Error al actualizar contraseña`)
+							console.log(json.error)
 						}
 					})
 				}

@@ -100,9 +100,14 @@ export const validatePasswordChange = (values) => {
     errors.confirmPassword = "Las contraseñas no coinciden"
     errors.valid = false
   }
-  if( newPassword.includes(" ") === true ){
-    errors.newPassword = "Contraseña no debe contener espacios"
+  if( newPassword === '' || newPassword === null || newPassword === undefined ){
+    errors.newPassword = "Contraseña no puede estar vacía"
     errors.valid = false
+  }else{
+    if( newPassword.includes(" ") === true ){
+      errors.newPassword = "Contraseña no debe contener espacios"
+      errors.valid = false
+    }
   }
   return errors;
 }
