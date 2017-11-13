@@ -117,21 +117,28 @@ export const validateInputs = (values) =>{
   errors.valid = true
   errors.valor = false
   errors.peso = false
-  if( values.valor === '' || values.valor === undefined || values.valor === null || isNaN(values.valor) ){
+  if( values.valor === '' || values.valor === undefined
+      || values.valor === null || isNaN(values.valor) ){
     errors.valor = true
     errors.valid = false
   }else{
-    if( values.valor < 0 ){
+    if( values.valor < 0 || Math.round(values.valor) === -0){
       errors.valor = true
       errors.valid = false
+    }else{
+      if( values.valor > 5){
+        errors.valor = true
+        errors.valid = false
+      }
     }
   }
 
-  if( values.peso === '' || values.peso === undefined || values.peso === null || isNaN(values.peso) ){
+  if( values.peso === '' || values.peso === undefined
+      || values.peso === null || isNaN(values.peso) ){
     errors.peso = true
     errors.valid = false
   }else{
-    if( values.peso < 0 ){
+    if( values.peso <= 0 ){
       errors.peso = true
       errors.valid = false
     }

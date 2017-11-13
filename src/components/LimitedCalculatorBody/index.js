@@ -36,11 +36,8 @@ class LimitedCalculatorBody extends React.Component{
 
 	handleEquals = () =>{
 		let values = this.state.values
-		let pesoCompleto = 0
+		let pesoCompleto = 100
 		let promedio = 0
-		for (var i = 0; i < values.length; i++) {
-			pesoCompleto += parseFloat(values[i].peso)
-		}
 		for (var j = 0; j < values.length; j++) {
 			const { valor , peso } = values[j]
 			promedio +=  (valor*peso)/pesoCompleto
@@ -53,6 +50,17 @@ class LimitedCalculatorBody extends React.Component{
 
 	handleChange = (e, { name, value }) => {
 		this.setState({ [name]: value })
+	}
+
+	handlePercentage = (e, { name, value }) => {
+		var number = value.indexOf("%")
+		var realValue = ""
+		if( number !== -1){
+			realValue = value.substring(0,number)
+		}else {
+			realValue = value
+		}
+		this.setState({ [name]: realValue })
 	}
 
 	updateErrors = (errors)=>{
@@ -68,7 +76,7 @@ class LimitedCalculatorBody extends React.Component{
 		if( errors.valid === true ){
 			let { valor , peso , index , matIndex } = this.state
 			let values = this.state.values
-			values.push({ valor: valor , peso: peso , index: index, materia:`Materia ${matIndex+1}`})
+			values.push({ valor: valor , peso: peso , index: index, materia:`Nota ${matIndex+1}`})
 			this.setState({
 				values: values,
 				index: this.state.index+1,
@@ -102,12 +110,21 @@ class LimitedCalculatorBody extends React.Component{
 		}
 	}
 
+	getTotalPercentage = () =>{
+		let values = this.state.values
+		var totalPercentage = 0
+		for (var j = 0; j < values.length; j++) {
+			totalPercentage += parseFloat(values[j].peso)
+		}
+		return totalPercentage
+	}
+
 	renderValues = () =>{
 		const { values } = this.state
 		if( values.length === 0){
 			return (
 				<List.Item>
-					<List.Header style={{textAlign: "center"}}>No tiene materias inscritas</List.Header>
+					<Header size={"medium"} style={{textAlign: "center"}}>No tiene notas inscritas</Header>
 				</List.Item>
 			)
 		}else{
@@ -119,7 +136,7 @@ class LimitedCalculatorBody extends React.Component{
 						</List.Content>
 						<List.Header>{item.materia}</List.Header>
 						<List.Content >
-							{`Nota: ${item.valor}    Creditos: ${item.peso}`}
+							{`Nota: ${item.valor}    Porcentaje: ${item.peso}%`}
 						</List.Content>
 					</List.Item>
 				)
@@ -141,7 +158,10 @@ class LimitedCalculatorBody extends React.Component{
 					{ this.state.hasProm &&
 					<Grid.Row centered>
 						<Grid.Column mobile={12} computer={8} textAlign='center'>
-							<Header>{`Tu promedio es ${(this.state.promedio).toFixed(2)}`}</Header>
+							<Header>
+								{`Tu promedio es ${(this.state.promedio).toFixed(2)}`}
+								<Header.Subheader>{`Porcentaje total: ${this.getTotalPercentage()}%`}</Header.Subheader>
+							</Header>
 						</Grid.Column>
 					</Grid.Row>}
 				</Grid>
@@ -167,9 +187,9 @@ class LimitedCalculatorBody extends React.Component{
 							</Grid.Row>
 							<Grid.Row>
 								<Input
-									label={"Creditos: "}
+									label={"Porcentaje: "}
 									name={"peso"}
-									onChange={this.handleChange}
+									onChange={this.handlePercentage}
 									type={"number"}
 									style={getErrorStyle(this.state.errorPeso)}
 								/>
