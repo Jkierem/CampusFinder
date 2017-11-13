@@ -97,7 +97,7 @@ class RouteBody extends React.Component{
 	}
 
 	handleChange = (e, { name, value }) => {
-		this.setState({ [name]: value })
+		this.setState({ [name]: value , routes:undefined})
 	}
 
 	checkValidity = () =>{
@@ -144,6 +144,11 @@ class RouteBody extends React.Component{
 					this.setState({
 						routes: routes.routes,
 						showSamePlace: false
+					})
+				}else{
+					this.setState({
+						routes: undefined,
+						showSamePlace: true
 					})
 				}
 			})

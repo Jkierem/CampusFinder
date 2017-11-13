@@ -4,9 +4,9 @@ import { getUsefulList , getPois , getBuildings as getBuilds} from '../Database'
 export const getRoutes = ( src , dst ) => {
 	return createGraph().then((g) => {
 		return getBuilds().then((json) => {
-			if( json.response === true){
+			const { buildings } = json
+			if( json.response === true && !isContained(buildings,src,dst)){
 				if( src !== dst ){
-					const { buildings } = json
 					var srcs = []
 					var dsts = []
 					if(src.type === "building"){
@@ -24,11 +24,30 @@ export const getRoutes = ( src , dst ) => {
 					return {routes: undefined , valid: false}
 				}
 			}else{
-				return undefined
+				return {routes: undefined , valid: false}
 			}
 		})
-
 	})
+}
+
+const isContained = (buildings , src , dst) => {
+	var inside = false;
+	if( src.type === "building" && dst.type === "poi"){
+		const build = buildings[findByName(buildings,src.value)]
+		for (let i = 0; i < build.pois.length; i++) {
+			if(build.pois[i].name === dst.value){
+				inside = true
+			}
+		}
+	}else if(src.type === "poi" && dst.type === "building"){
+		const build = buildings[findByName(buildings,dst.value)]
+		for (let i = 0; i < build.pois.length; i++) {
+			if(build.pois[i].name === src.value){
+				inside = true
+			}
+		}
+	}
+	return inside
 }
 
 const getBestPaths = (graph , srcs , dsts) =>{
