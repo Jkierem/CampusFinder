@@ -1,4 +1,5 @@
 import React from 'react'
+import { getUsefulList } from '../Database'
 
 export const testBuildings=[
 	{key: "ed2" , value: "Ed. 2 - Fernando Baron" , text: "Ed. 2 - Fernando Baron"},
@@ -100,35 +101,28 @@ export const findBuildingID = (building) =>{
 }
 
 export const getBuildings = () =>{
-	var URL  = process.env.REACT_APP_URL
-	var PORT = process.env.REACT_APP_DB_PORT
-	fetch( `${URL}:${PORT}/buildings`,{method: 'GET'}).then((value) => {
-		console.log(value);
-	})
-}
-
-export const postRoute = ( src , dst ) =>{
-	var URL  = process.env.REACT_APP_URL
-	var PORT = process.env.REACT_APP_PORT
-	fetch(`${URL}/route:${PORT}`,
-	{
-			method:'POST',
-			body: JSON.stringify({ origen: src , destino: dst })
-	}).then((value) => {
-			console.log(value);
-	})
-}
-
-export const postUser = ( user ) =>{
-	const { username , name , email , password } = user
-	var URL  = process.env.REACT_APP_URL
-	var PORT = process.env.REACT_APP_PORT
-	fetch(`${URL}/route:${PORT}`,
-	{
-			method:'POST',
-			body: JSON.stringify({ username: username , name: name , email: email , password: password })
-	}).then((value) => {
-		console.log(value);
+	return getUsefulList().then((json) => {
+		if( json.response === true ){
+			let list = []
+			let { buildings , pois } = json
+			for (var i = 0; i < buildings.length; i++) {
+				list.push({
+					key: `ed${i}`,
+					value: buildings[i].name,
+					text: buildings[i].name,
+					type: "building"
+				})
+			}
+			for (var j = 0; j < pois.length; j++) {
+				list.push({
+					key: `poi${j}`,
+					value: pois[j].name,
+					text: pois[j].name,
+					type: "poi"
+				})
+			}
+			return list
+		}
 	})
 }
 

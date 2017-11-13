@@ -83,3 +83,47 @@ export const deleteAccount = ( id , password ) =>{
 		return value.json()
 	})
 }
+
+export const getUsefulList = () =>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch(`${url}:${dbport}/list`).then((response) => {
+		return response.json()
+	})
+}
+
+export const getPoiByName = (name) =>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch(`${url}:${dbport}/pois/info`,{
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(
+			{
+				"name":name
+			}
+		)
+	}).then((response) => {
+		return response.json()
+	})
+}
+
+export const getBuildingByName = (name) =>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch(`${url}:${dbport}/buildings/info`,{
+		method: "POST",
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(
+			{
+				"name":name
+			}
+		)
+	}).then((response) => {
+		return response.json()
+	})
+}

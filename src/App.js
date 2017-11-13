@@ -12,6 +12,7 @@ import ScheduleBody from './components/ScheduleBody'
 import SearchBody from './components/SearchBody'
 import SignInBody from './components/SignInBody'
 import UserhomeBody from './components/UserhomeBody'
+import { getBuildings } from './resources/Buildings'
 import { commonBackground } from './resources/Styles'
 import { Route , Switch , Redirect , withRouter } from 'react-router-dom'
 import * as Pages from './resources/Pages'
@@ -23,8 +24,16 @@ class App extends React.Component{
 			user: null,
 			visible: false,
 			noButton: true,
-			buildings: this.props.buildings
+			buildings: null
 		}
+	}
+
+	componentWillMount = () =>{
+		getBuildings().then((value) => {
+			this.setState({
+				buildings: value
+			})
+		})
 	}
 
 	onToggleMenu = () =>{
