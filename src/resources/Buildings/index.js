@@ -1,103 +1,106 @@
-import React from 'react'
-import { getUsefulList } from '../Database'
-
-export const testBuildings=[
-	{key: "ed2" , value: "Ed. 2 - Fernando Baron" , text: "Ed. 2 - Fernando Baron"},
-	{key: "ed11" , value: "Ed. 11 - Jose Gabriel Maldonado", text: "Ed. 11 - Jose Gabriel Maldonado"},
-	{key: "pi1" , value: "Cafeteria - Teppanyaki - Ingenieria" ,text: "Cafeteria - Teppanyaki - Ingenieria" }
-]
+import Graph from '../Graph'
+import { getUsefulList , getPois , getBuildings as getBuilds} from '../Database'
 
 export const getRoutes = ( src , dst ) => {
-	var sid = findBuildingID( src );
-	var did = findBuildingID( dst );
-	var routes = [];
-	var route1 = {}
-	route1.nodes = []
-	var route2 = {}
-	route2.nodes = []
-	if( sid === did ){
-		route1.nodes = ['Ya te encuentras en tu destino']
-		routes.push(route1)
-	}else
-	if ( sid === "ed2" ) {
-		if ( did === "ed11" ) {
+	return createGraph().then((g) => {
+		return getBuilds().then((json) => {
+			if( json.response === true){
+				if( src !== dst ){
+					const { buildings } = json
+					var srcs = []
+					var dsts = []
+					if(src.type === "building"){
+						srcs = findExits(buildings,src.value)
+					}else{
+						srcs.push(src.value)
+					}
+					if(dst.type === "building"){
+						dsts = findEntrances(buildings,dst.value)
+					}else{
+						dsts.push(dst.value)
+					}
+					return {routes:getBestPaths(g,srcs,dsts) , valid: true}
+				}else{
+					return {routes: undefined , valid: false}
+				}
+			}else{
+				return undefined
+			}
+		})
 
-			route1.nodes.push( `Salida Piso 1 ${findText(sid)}` )
-			route1.nodes.push( findText("pi1") )
-			route1.nodes.push( `Entrada/Salida Piso 4 ${findText(did)}`)
+	})
+}
 
-			route2.nodes.push( `Salida Piso S1 ${findText(sid)}`)
-			route2.nodes.push( `Escaleras Ed. 2 a Cl. 41b `)
-			route2.nodes.push( `Entrada/Salida Piso 2 ${findText(did)}`)
-
-			routes.push(route1)
-			routes.push(route2)
-		}else
-		if ( did === "pi1" ) {
-
-			route1.nodes.push( `Salida Piso 1 ${findText(sid)}` )
-			route1.nodes.push( findText("pi1") )
-
-			routes.push(route1)
+const getBestPaths = (graph , srcs , dsts) =>{
+	let routes = []
+	for( var i = 0 ; i < srcs.length ; i++ ){
+		var minW = 1/0
+		var bestPath = []
+		var src = srcs[i]
+		for (var j = 0; j < dsts.length; j++) {
+			var dst = dsts[j]
+			var route = graph.getPath(src,dst)
+			if( route.peso < minW ){
+				minW = route.peso
+				bestPath = route.path
+			}
 		}
-	}else
-	if ( sid === "ed11") {
-		if ( did === "ed2" ) {
-
-			route1.nodes.push( `Entrada/Salida Piso 4 ${findText(sid)}`)
-			route1.nodes.push( findText("pi1") )
-			route1.nodes.push( `Entrada Piso PP ${findText(did)}` )
-
-			route2.nodes.push( `Entrada/Salida Piso 2 ${findText(sid)}`)
-			route2.nodes.push( `Escaleras  Cl. 41b a Ed. 2 `)
-			route2.nodes.push( `Entrada Piso PP ${findText(did)}`)
-
-			routes.push(route1)
-			routes.push(route2)
-		}else
-		if ( did === "pi1" ) {
-
-			route1.nodes.push( `Entrada/Salida Piso 4 ${findText(sid)}`)
-			route1.nodes.push( findText("pi1") )
-
-			routes.push(route1)
-		}
-	}else
-	if ( sid === "pi1" ) {
-		if ( did === "ed11" ) {
-
-			route1.nodes.push( findText(`pi1`))
-			route1.nodes.push( `Entrada/Salida Piso 4 ${findText(did)}`)
-
-			routes.push(route1)
-		}else
-		if ( did === "ed2" ) {
-
-			route1.nodes.push( findText(`pi1`))
-			route1.nodes.push( `Entrada Piso PP ${findText(did)}`)
-
-			routes.push(route1)
-		}
+		routes.push(bestPath)
 	}
 	return routes
 }
 
-export const findText = (id) =>{
-	for (var i = 0; i < testBuildings.length; i++) {
-		if( testBuildings[i].key === id ){
-			return testBuildings[i].text;
+const findByName = (buildings,name) =>{
+	let index = -1
+	for (var i = 0; i < buildings.length; i++) {
+		if(buildings[i].name === name){
+			index = i
 		}
 	}
-	return undefined;
+	return index
 }
 
-export const findBuildingID = (building) =>{
-	for (var i = 0; i < testBuildings.length; i++) {
-		if( testBuildings[i].text === building ){
-			return testBuildings[i].key;
+const findEntrances = (buildings,name) =>{
+	var building = buildings[findByName(buildings,name)]
+	let entrances = []
+	const { pois } = building
+	for (var i = 0; i < pois.length; i++) {
+		if( pois[i].kind === "Entrada" || pois[i].kind === "Entrada/Salida" ){
+			entrances.push(pois[i].name)
 		}
 	}
-	return undefined;
+	return entrances
+}
+
+const findExits = (buildings,name) =>{
+	var building = buildings[findByName(buildings,name)]
+	let exits = []
+	const { pois } = building
+	for (var i = 0; i < pois.length; i++) {
+		if( pois[i].kind === "Salida" || pois[i].kind === "Entrada/Salida" ){
+			exits.push(pois[i].name)
+		}
+	}
+	return exits
+}
+
+const createGraph = () =>{
+	return getPois().then((json) => {
+		if(json.response === true){
+			var g = new Graph()
+			const { pois } = json
+			for (var i = 0; i < pois.length; i++) {
+				let poi = pois[i]
+				const { neighbors } = poi
+				let arcs = {}
+				for (var j = 0; j < neighbors.length; j++) {
+					arcs[neighbors[j].name] = neighbors[j].cost
+				}
+				g.addVertex( poi.name , arcs )
+			}
+			return g
+		}
+	})
 }
 
 export const getBuildings = () =>{
@@ -125,22 +128,3 @@ export const getBuildings = () =>{
 		}
 	})
 }
-
-//LEGACY FUNCS JUST IN CASE
-export const createDatalist = ( items , id ) => {
-	var opts = items.map((item) => {
-		return(
-			<option value={item.value} key={item.key}/>
-		)
-	})
-	return(
-		<datalist id={id}>
-			{opts}
-		</datalist>
-	)
-}
-
-export const buildingsData = () =>{
-	return createDatalist( testBuildings , 'buildings' )
-}
-//END LEGACY

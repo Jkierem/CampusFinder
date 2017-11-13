@@ -127,3 +127,19 @@ export const getBuildingByName = (name) =>{
 		return response.json()
 	})
 }
+
+export const getPois = () =>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch(`${url}:${dbport}/pois`).then((response) => {
+		return response.json()
+	})
+}
+
+export const getBuildings = () =>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch(`${url}:${dbport}/buildings`).then((response) => {
+		return response.json()
+	})
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import FavoriteButton from '../FavoriteButton'
 import { Grid , Dropdown , Button , Form , Icon , Divider } from 'semantic-ui-react'
 import { getRoutes } from '../../resources/Buildings'
 
@@ -6,7 +7,8 @@ class RouteBody extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			loading: false
+			loading: false,
+			showSamePlace: false
 		}
 	}
 
@@ -14,14 +16,18 @@ class RouteBody extends React.Component{
 		this.props.handleMenuButton(false)
 	}
 
-	getSingleRoute = (route) =>{
+	handleAddFavorite = (e,data) =>{console.log(data)}
+
+	handleRemoveFavorite = (e,data) =>{console.log(data)}
+
+	getSingleRoute = (route,index) =>{
 		var nodes = []
-		for (var i = 0; i < route.nodes.length; i++) {
-			if( i !== route.nodes.length -1 ){
+		for (var i = 0; i < route.length; i++) {
+			if( i !== route.length -1 ){
 				nodes.push(
 				<Grid.Row centered key={Math.random()}>
 					<Grid.Column textAlign="center" width={14}>
-						{route.nodes[i]}
+						{route[i]}
 					</Grid.Column>
 				</Grid.Row>)
 				nodes.push(
@@ -35,7 +41,17 @@ class RouteBody extends React.Component{
 				nodes.push(
 				<Grid.Row centered key={Math.random()}>
 					<Grid.Column textAlign="center" width={14}>
-						{route.nodes[i]}
+						{route[i]}
+					</Grid.Column>
+				</Grid.Row>)
+				nodes.push(
+				<Grid.Row centered key={Math.random()}>
+					<Grid.Column textAlign="center" width={14}>
+						<FavoriteButton
+							onSelected={this.handleAddFavorite}
+							onDeselected={this.handleRemoveFavorite}
+							index={index}
+						/>
 					</Grid.Column>
 				</Grid.Row>)
 				nodes.push(
@@ -50,13 +66,30 @@ class RouteBody extends React.Component{
 	}
 
 	renderRoutes = () =>{
-		const { routes } = this.state
+		const { routes , showSamePlace } = this.state
 		if( routes === undefined) {
-			return( <section/> )
+			if( showSamePlace === false){
+				return( <section/> )
+			}else{
+				var rows = []
+				rows.push(
+				<Grid.Row centered key={Math.random()}>
+					<Grid.Column textAlign="center" width={14}>
+						Ya te encuentras en tu destino
+					</Grid.Column>
+				</Grid.Row>)
+				rows.push(
+				<Grid.Row centered key={Math.random()}>
+					<Grid.Column textAlign="center" width={14}>
+						<Divider horizontal>O</Divider>
+					</Grid.Column>
+				</Grid.Row>)
+				return(rows)
+			}
 		}else{
 			var allRoutes = []
 			for (var i = 0; i < routes.length; i++) {
-				var route = this.getSingleRoute(routes[i])
+				var route = this.getSingleRoute(routes[i],i)
 				allRoutes.push(route)
 			}
 			return allRoutes
@@ -69,10 +102,28 @@ class RouteBody extends React.Component{
 
 	checkValidity = () =>{
 		const { Origen , Destino } = this.state
-		if( Origen !== undefined && Destino !== undefined ){
-			return true
+		var valid = false
+		if( Origen === Destino ){
+			this.setState({
+				showSamePlace: true
+			})
+		}else{
+			if( Origen !== undefined && Destino !== undefined ){
+				valid = true
+			}
 		}
-		return false
+		return valid
+	}
+
+	findByName = (name) =>{
+		const { buildings } = this.props
+		let index = -1
+		for (var i = 0; i < buildings.length; i++) {
+			if(buildings[i].text === name){
+				index = i
+			}
+		}
+		return index
 	}
 
 	onSearch = () => {
@@ -81,15 +132,20 @@ class RouteBody extends React.Component{
 			this.setState({
 				loading: !this.state.loading
 			})
-			window.setTimeout(()=>{
+			const { Origen , Destino }  = this.state
+			const { buildings } = this.props
+			var src = buildings[this.findByName(Origen)]
+			var dst = buildings[this.findByName(Destino)]
+			getRoutes(src,dst).then((routes) => {
 				this.setState({
 					loading: !this.state.loading
 				})
-			},1000)
-			const { Origen , Destino } = this.state
-			var routes = getRoutes( Origen , Destino )
-			this.setState({
-				routes: routes
+				if( routes.valid === true ){
+					this.setState({
+						routes: routes.routes,
+						showSamePlace: false
+					})
+				}
 			})
 		}
 	}
