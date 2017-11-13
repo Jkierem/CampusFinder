@@ -117,7 +117,7 @@ export const validateInputs = (values) =>{
   errors.valid = true
   errors.valor = false
   errors.peso = false
-  if( values.valor === '' || values.valor === undefined || values.valor === null ){
+  if( values.valor === '' || values.valor === undefined || values.valor === null || isNaN(values.valor) ){
     errors.valor = true
     errors.valid = false
   }else{
@@ -127,7 +127,7 @@ export const validateInputs = (values) =>{
     }
   }
 
-  if( values.peso === '' || values.peso === undefined || values.peso === null ){
+  if( values.peso === '' || values.peso === undefined || values.peso === null || isNaN(values.peso) ){
     errors.peso = true
     errors.valid = false
   }else{

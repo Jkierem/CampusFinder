@@ -24,7 +24,9 @@ class LimitedCalculatorBody extends React.Component{
 
 	toggleAddModal = () =>{
 		this.setState({
-			addModalOpen: !this.state.addModalOpen
+			addModalOpen: !this.state.addModalOpen,
+			errorPeso: false,
+			errorValor: false
 		})
 	}
 
@@ -70,12 +72,13 @@ class LimitedCalculatorBody extends React.Component{
 			this.setState({
 				values: values,
 				index: this.state.index+1,
-				matIndex : this.state.matIndex + 1
+				matIndex : this.state.matIndex + 1,
+				hasProm: true,
+				valor: "not_a_number",
+				peso: "not_a_number"
 			})
 			this.toggleAddModal()
-			if( this.state.hasProm === true ){
-				this.handleEquals()
-			}
+			this.handleEquals()
 		}
 	}
 
@@ -129,7 +132,7 @@ class LimitedCalculatorBody extends React.Component{
 			<div>
 				<Grid centered padded columns={16}>
 					<Grid.Row centered>
-						<Grid.Column width={8}>
+						<Grid.Column mobile={12} computer={8} >
 							<List divided verticalAlign='middle' size="medium">
 								{this.renderValues()}
 							</List>
@@ -137,14 +140,13 @@ class LimitedCalculatorBody extends React.Component{
 					</Grid.Row>
 					{ this.state.hasProm &&
 					<Grid.Row centered>
-						<Grid.Column width={8} textAlign='center'>
+						<Grid.Column mobile={12} computer={8} textAlign='center'>
 							<Header>{`Tu promedio es ${(this.state.promedio).toFixed(2)}`}</Header>
 						</Grid.Column>
 					</Grid.Row>}
 				</Grid>
 
-				<FAB onClick={this.handleClick} left={"70vw"} />
-				<FAB onClick={this.handleEquals} icon={"checkmark"} color={"#55f"}/>
+				<FAB onClick={this.handleClick} />
 				<Modal
 					open={this.state.addModalOpen}
 					onClose={this.toggleAddModal}
