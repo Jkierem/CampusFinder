@@ -10,12 +10,12 @@ class FAB extends React.Component{
 	}
 
 	render(){
-		const color = this.props.color? this.props.color : PUJYellow
+		const { left , top , icon="plus" , color=PUJYellow} = this.props
 		return(
 			<Button
 				circular
-				style={fabStyle(color)}
-				icon={<Icon name={'plus'} />}
+				style={fabStyle(color,left,top)}
+				icon={<Icon name={icon} />}
 				size={'huge'}
 				onClick={this.props.onClick}
 			/>

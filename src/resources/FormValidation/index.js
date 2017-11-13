@@ -111,3 +111,31 @@ export const validatePasswordChange = (values) => {
   }
   return errors;
 }
+
+export const validateInputs = (values) =>{
+  let errors = {}
+  errors.valid = true
+  errors.valor = false
+  errors.peso = false
+  if( values.valor === '' || values.valor === undefined || values.valor === null ){
+    errors.valor = true
+    errors.valid = false
+  }else{
+    if( values.valor < 0 ){
+      errors.valor = true
+      errors.valid = false
+    }
+  }
+
+  if( values.peso === '' || values.peso === undefined || values.peso === null ){
+    errors.peso = true
+    errors.valid = false
+  }else{
+    if( values.peso < 0 ){
+      errors.peso = true
+      errors.valid = false
+    }
+  }
+
+  return errors
+}
