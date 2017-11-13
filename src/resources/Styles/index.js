@@ -46,11 +46,11 @@ export const labelStyle = (bcolor , textColor=Colors.PUJBlack) =>{
 	}
 }
 
-export const fabStyle = (color,left='80vw',top='78vh') =>{
+export const fabStyle = (color,left='80%',bottom='20px') =>{
 	return{
 		position: 'fixed',
 		backgroundColor: color,
 		left: left,
-		top: top
+		bottom: bottom
 	}
 }
