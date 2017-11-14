@@ -102,8 +102,8 @@ class App extends React.Component{
 					<Route exact path='/home' render={ (props) => {return <UserhomeBody {...props} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/perfil' render={ (props) => {return <ProfileBody {...props} user={user} handleMenuButton={handleMenuButton} onDelete={this.onDeleteUser}/>} }/>
 					<Route exact path='/buscar' render={ (props) => {return <SearchBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
-					<Route exact path='/calcularRuta' render={ (props) => {return <RouteBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
-					<Route exact path='/favoritos' render={ (props) => {return <FavoritesBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/calcularRuta' render={ (props) => {return <RouteBody {...props} user={user} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/favoritos' render={ (props) => {return <FavoritesBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/horario' render={ (props) => {return <ScheduleBody {...props} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>

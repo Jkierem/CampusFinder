@@ -2,6 +2,7 @@ import React from 'react'
 import FavoriteButton from '../FavoriteButton'
 import { Grid , Dropdown , Button , Form , Icon , Divider } from 'semantic-ui-react'
 import { getRoutes } from '../../resources/Buildings'
+import { getUserByNickname , updateUserAdditionalData } from '../../resources/Database'
 
 class RouteBody extends React.Component{
 	constructor(props){
@@ -16,9 +17,72 @@ class RouteBody extends React.Component{
 		this.props.handleMenuButton(false)
 	}
 
-	handleAddFavorite = (e,data) =>{console.log(data)}
+	handleAddFavorite = (e,data) =>{
 
-	handleRemoveFavorite = (e,data) =>{console.log(data)}
+		const { Origen , Destino , routes} = this.state
+		let route = {
+			origen: Origen ,
+			destino: Destino,
+			path: routes[data.index]
+		}
+		getUserByNickname(this.props.user).then((json) => {
+			if(json.response === true ){
+				let { user } = json
+				if( user.additionalData === undefined ){
+					user.additionalData = {}
+				}
+				if( user.additionalData.favorites === undefined ){
+					user.additionalData.favorites = []
+				}
+				user.additionalData.favorites.push(route)
+				updateUserAdditionalData( user._id , user.additionalData ).then((value) => {
+					if(value.response !== true){
+						alert("Error adding favorite")
+						console.log(value);
+					}
+				})
+			}
+		})
+	}
+
+
+	handleRemoveFavorite = (e,data) =>{
+		const { Origen , Destino , routes} = this.state
+		let route = {
+			origen: Origen ,
+			destino: Destino,
+			path: routes[data.index]
+		}
+		getUserByNickname(this.props.user).then((json) => {
+			if(json.response === true){
+				let { user } = json
+				let { favorites } = user.additionalData
+				var i = 0
+				let ocur = false
+				let trash = -1
+				while( i < favorites.length && !ocur ) {
+					if(favorites[i].origen === route.origen && favorites[i].destino === route.destino){
+						ocur = true
+						trash = i
+					}
+					i++
+				}
+				if( ocur === true ){
+					favorites.splice(trash,1)
+				}
+				user.additionalData.favorites = favorites
+				updateUserAdditionalData( user._id , user.additionalData ).then((value) => {
+					if(value.response !== true){
+						alert("Error adding favorite. Check console")
+						console.log(value);
+					}
+				})
+			}else {
+				alert("Error Finding user. Check console")
+				console.log(json);
+			}
+		})
+	}
 
 	getSingleRoute = (route,index) =>{
 		var nodes = []

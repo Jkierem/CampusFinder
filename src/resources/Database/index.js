@@ -47,6 +47,15 @@ export const checkNickname = ( nickname ) =>{
 		})
 }
 
+export const getUserByNickname = ( nickname ) =>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch( `${url}:${dbport}/user/info/${nickname}`)
+		.then((response) => {
+			return response.json()
+		})
+}
+
 export const updateUser = ( _id , email , password ) =>{
 	const url = process.env.REACT_APP_URL
 	const dbport = process.env.REACT_APP_DB_PORT
@@ -59,6 +68,24 @@ export const updateUser = ( _id , email , password ) =>{
 			{
 				"email": email,
 				"password":password
+			}
+		)
+	}).then((response) => {
+		return response.json()
+	})
+}
+
+export const updateUserAdditionalData = ( _id , additionalData )=>{
+	const url = process.env.REACT_APP_URL
+	const dbport = process.env.REACT_APP_DB_PORT
+	return fetch(`${url}:${dbport}/user/${_id}`,{
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(
+			{
+				"additionalData":additionalData
 			}
 		)
 	}).then((response) => {
