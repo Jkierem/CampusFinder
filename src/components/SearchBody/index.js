@@ -106,7 +106,7 @@ class SearchBody extends React.Component{
 		const { buildings } = this.props;
 		return(
 			<Form loading={this.state.loading}>
-				<Grid padded centered columns={16}>
+				<Grid stackable padded centered columns={16}>
 					<Grid.Row centered>
 						<Grid.Column textAlign='center' width={14} style={{maxWidth:350}}>
 							<Form.Field>

@@ -445,7 +445,7 @@ class ScheduleBody extends React.Component{
 						>
 							<Modal.Content>
 								<Form>
-									<Grid  padded columns={16}>
+									<Grid stackable padded columns={16}>
 										<Grid.Row centered>
 											<Grid.Column textAlign="left" width={16}>
 												<Header>Curso</Header>
@@ -511,12 +511,16 @@ class ScheduleBody extends React.Component{
 										{this.renderSesions()}
 
 										<Grid.Row centered>
-											<Grid.Column textAlign="center" width={2}>
-												<Button color={"red"} icon={"minus"} onClick={this.deleteRow}></Button>
-											</Grid.Column>
-											<Grid.Column textAlign="center" width={2}>
-												<Button color={"green"} icon={"add"} onClick={this.addRow}></Button>
-											</Grid.Column>
+											<Grid centered columns={16}>
+												<Grid.Row centered>
+													<Grid.Column textAlign="center" computer={2} mobile={6}>
+														<Button color={"red"} icon={"minus"} onClick={this.deleteRow}></Button>
+													</Grid.Column>
+													<Grid.Column textAlign="center" computer={2} mobile={6}>
+														<Button color={"green"} icon={"add"} onClick={this.addRow}></Button>
+													</Grid.Column>
+												</Grid.Row>
+											</Grid>
 										</Grid.Row>
 
 										<Grid.Row centered>
