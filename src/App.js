@@ -21,7 +21,7 @@ class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			user: "testFinder",
+			user: null,
 			visible: false,
 			noButton: true,
 			buildings: null
