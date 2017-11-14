@@ -421,7 +421,7 @@ class ScheduleBody extends React.Component{
 				<div>
 					<Grid padded centered columns={16}>
 						<Grid.Row centered>
-							<Grid.Column verticalAlign={"middle"} textAlign='center' width={14} style={{maxWidth:350}}>
+							<Grid.Column verticalAlign={"middle"} textAlign='center' width={14} style={{maxWidth:350,userSelect:"none"}}>
 								<span>
 									<ArrowButton direction={"left" } onClick={this.prevDay}/>
 									<span style={{paddingLeft:10,paddingRight:10,fontSize:"2rem", verticalAlign: "middle"}}>{this.currDay()}</span>
@@ -511,6 +511,7 @@ class ScheduleBody extends React.Component{
 										{this.renderSesions()}
 
 										<Grid.Row centered>
+											<Grid.Column width={16}>
 											<Grid centered columns={16}>
 												<Grid.Row centered>
 													<Grid.Column textAlign="center" computer={2} mobile={6}>
@@ -521,6 +522,7 @@ class ScheduleBody extends React.Component{
 													</Grid.Column>
 												</Grid.Row>
 											</Grid>
+											</Grid.Column>
 										</Grid.Row>
 
 										<Grid.Row centered>

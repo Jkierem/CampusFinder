@@ -29,7 +29,7 @@ export const containerStyle = {
 }
 
 export const commonBackground = {
-	minHeight: getDeviceHeight() - 50,
+	minHeight: getDeviceHeight() - 47.5,
 	minWidth: "100%",
 	paddingTop: 20,
 	backgroundColor: Colors.superLightGray
