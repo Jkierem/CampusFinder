@@ -21,7 +21,7 @@ class App extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			user: null,
+			user: "testFinder",
 			visible: false,
 			noButton: true,
 			buildings: null
@@ -104,8 +104,8 @@ class App extends React.Component{
 					<Route exact path='/buscar' render={ (props) => {return <SearchBody {...props} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/calcularRuta' render={ (props) => {return <RouteBody {...props} user={user} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/favoritos' render={ (props) => {return <FavoritesBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
-					<Route exact path='/horario' render={ (props) => {return <ScheduleBody {...props} handleMenuButton={handleMenuButton}/>} }/>
-					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/horario' render={ (props) => {return <ScheduleBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>
 					<Route render={ () => {return <Redirect to={'/home'}/>} }/>
 				</Switch>)

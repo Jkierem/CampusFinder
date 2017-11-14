@@ -146,3 +146,9 @@ export const validateInputs = (values) =>{
 
   return errors
 }
+
+export const validateEventForm = (values) =>{
+  let errors = {}
+  errors.valid = true
+  return errors
+}
