@@ -18,10 +18,16 @@ class FavoritesBody extends React.Component{
 		getUserByNickname(this.props.user).then((json) => {
 			if( json.response === true){
 				const { user } = json
+				let favorites = []
+				if( user.additionalData !== undefined ){
+					if( user.additionalData.favorites !== undefined ){
+						favorites = user.additionalData.favorites
+					}
+				}
 				this.setState({
 					loading: false,
 					ready: true,
-					favorites: user.additionalData.favorites
+					favorites: favorites
 				})
 			}else{
 				alert("ERROR: check console")
