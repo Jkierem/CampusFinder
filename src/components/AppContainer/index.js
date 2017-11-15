@@ -113,11 +113,20 @@ class AppContainer extends React.Component{
 		return items;
 	}
 
+	onRightClick = () =>{
+		this.props.onRightClick()
+	}
+
 	render(){
-		const { visible , toggleMenu , noButton } = this.props
+		const { visible , toggleMenu , noButton , rightButton } = this.props
 		return(
 				<div>
-					<Navbar onMenuClick={toggleMenu} noButton={noButton}/>
+					<Navbar
+						onMenuClick={toggleMenu}
+						noButton={noButton}
+						rightButton={rightButton}
+						onRightClick={this.onRightClick}
+					/>
 					<div style={ containerStyle }>
 						<Sidebar.Pushable as={Segment} style={{boxShadow: "none", border: "none"}}>
 			          <Sidebar

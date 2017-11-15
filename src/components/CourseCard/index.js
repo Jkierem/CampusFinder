@@ -18,7 +18,10 @@ class CourseCard extends React.Component{
 		let data={
 			...this.props
 		}
-		this.props.onClick(e,data)
+		const { onClick } = this.props;
+		if( onClick !== undefined ){
+			onClick(e,data)
+		}
 	}
 
 	render(){
@@ -27,7 +30,9 @@ class CourseCard extends React.Component{
 						start ,
 						end ,
 						description="Here lies an empty description",
+						onClick
 					} = this.props
+		let cur = (onClick === undefined)?"default":"pointer";
 		return(
 			<Segment.Group >
 				<Label
@@ -39,7 +44,7 @@ class CourseCard extends React.Component{
 				<Segment
 					inverted
 					color={color}
-					style={{cursor:"pointer"}}
+					style={{cursor:cur}}
 					onClick={this.handleHeaderClick}
 				>
 					<Header>{`${name} ${start}-${end}`}</Header>

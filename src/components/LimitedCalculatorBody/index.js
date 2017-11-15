@@ -1,5 +1,4 @@
 import React from 'react'
-import FAB from  '../FAB'
 import { getErrorStyle } from '../../resources/Styles'
 import { validateInputs } from '../../resources/FormValidation'
 import { List , Modal , Button , Header , Input , Grid } from 'semantic-ui-react'
@@ -19,7 +18,7 @@ class LimitedCalculatorBody extends React.Component{
 	}
 
 	componentWillMount = () =>{
-		this.props.handleMenuButton(false)
+		this.props.handleMenuButton(false,true,this.handleClick)
 	}
 
 	toggleAddModal = () =>{
@@ -166,7 +165,6 @@ class LimitedCalculatorBody extends React.Component{
 					</Grid.Row>}
 				</Grid>
 
-				<FAB onClick={this.handleClick} />
 				<Modal
 					open={this.state.addModalOpen}
 					onClose={this.toggleAddModal}
@@ -174,7 +172,7 @@ class LimitedCalculatorBody extends React.Component{
 					closeIcon
 				>
 					<Header>Agregar Valor</Header>
-					<Modal.Content>
+					<Modal.Content scrolling>
 						<Grid padded centered >
 							<Grid.Row>
 								<Input

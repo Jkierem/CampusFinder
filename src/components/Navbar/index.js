@@ -14,6 +14,10 @@ class Navbar extends React.Component{
 		this.props.onMenuClick()
 	}
 
+	onAdd = () =>{
+		this.props.onRightClick()
+	}
+
 	renderContent = () => {
 		const { noButton } = this.props
 		if( noButton === true ){
@@ -24,7 +28,7 @@ class Navbar extends React.Component{
 	}
 
 	render(){
-		const { noButton } = this.props
+		const { noButton , rightButton=false } = this.props
 		return(
 			<Menu
 				fixed="top"
@@ -39,6 +43,11 @@ class Navbar extends React.Component{
 					<Menu.Item>
 						{this.renderContent()}
 					</Menu.Item>
+					{ rightButton &&
+						<Menu.Item onClick={this.onAdd} position="right" >
+							<Icon name={"add"} color={"yellow"} />
+						</Menu.Item>
+					}
 			</Menu>
 		);
 	}

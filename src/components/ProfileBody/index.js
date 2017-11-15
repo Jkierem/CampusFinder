@@ -218,7 +218,7 @@ class ProfileBody extends React.Component{
 						basic
 					>
 						<Header textAlign="center">Actualizacion Exitosa</Header>
-						<Modal.Content >
+						<Modal.Content scrolling>
 							<section style={{textAlign: "center"}}>
 								<Button color={"green"} onClick={this.closeUpdateModal}>Ok</Button>
 							</section>
@@ -232,7 +232,7 @@ class ProfileBody extends React.Component{
 						closeIcon
 					>
 						<Header content='Cambiar contraseña' />
-						<Modal.Content>
+						<Modal.Content scrolling>
 							<Form>
 							<Grid centered >
 								<Grid.Row centered>
@@ -293,7 +293,7 @@ class ProfileBody extends React.Component{
 						closeIcon
 					>
 						<Header icon={<Icon color={'red'} name='warning sign'/>} content={"¿Estas seguro?"}/>
-						<Modal.Content>
+						<Modal.Content scrolling>
 							<Grid centered >
 								<Grid.Row centered>
 										<Input

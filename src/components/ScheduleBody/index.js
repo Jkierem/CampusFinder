@@ -5,16 +5,17 @@ import { validateEventForm } from '../../resources/FormValidation'
 import { colorList as colors } from '../../resources/Colors'
 import { getUserByNickname , updateUserAdditionalData } from '../../resources/Database'
 import { Button , Grid , Header , Modal , Form , Loader } from 'semantic-ui-react'
-import FAB from '../FAB'
 
 class ScheduleBody extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
 			eventOpen: false,
+			deleteOpen: false,
 			currentDay: 0,
 			loading: true,
 			ready: false,
+			gIndex: 0,
 			days: ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"],
 			user:{
 				courses:[],
@@ -26,13 +27,14 @@ class ScheduleBody extends React.Component{
 				sessions: {},
 				newCourse: "",
 				existingCourse: "",
-				color: ""
+				color: "",
+				creds: 1
 			}
 		}
 	}
 
 	componentWillMount = () =>{
-		this.props.handleMenuButton(false)
+		this.props.handleMenuButton(false,true,this.toggleEventModal)
 		getUserByNickname(this.props.user).then((json) => {
 			if( json.response === true ){
 				const { user } = json
@@ -69,10 +71,6 @@ class ScheduleBody extends React.Component{
 		})
 	}
 
-	updateErrors = (errors) =>{
-
-	}
-
 	getCourses = () =>{
 		let options = []
 		const { courses } = this.state.user
@@ -99,6 +97,12 @@ class ScheduleBody extends React.Component{
 		return options
 	}
 
+	toggleDeleteModal = () =>{
+		this.setState({
+			deleteOpen: !this.state.deleteOpen
+		})
+	}
+
 	toggleEventModal = () =>{
 		this.setState({
 			eventOpen: !this.state.eventOpen
@@ -110,20 +114,159 @@ class ScheduleBody extends React.Component{
 			eventOpen: !this.state.eventOpen,
 			form:{
 				sessionNumber: 1,
-				sessions: {},
 				newCourse: "",
 				existingCourse: "",
-				color: ""
+				color: "",
+				sessions: {},
+				creds: 1
 			}
 		})
 	}
 
-	handleCardClick = (e,data) =>{
-		console.log(data);
+	handleCardDelete = (e,data) =>{
+		this.toggleDeleteModal()
+		this.setState({
+			selectedCard: data
+		})
 	}
 
-	handleCardDelete = (e,data) =>{
-		console.log(data);
+	handleDeleteSingleEvent = () =>{
+		const { selectedCard:data , user:{ events } } = this.state;
+		const day = this.currDay()
+		let dayEvents = events[day]
+		let trash = -1;
+		for( let i = 0 ; i < dayEvents.length ; i++ ){
+			const event = dayEvents[i]
+			if( event.courseName === data.name && event.start === data.start && event.end === data.end ){
+				trash = i
+			}
+		}
+		dayEvents.splice(trash,1)
+		let newEvents={
+			...events
+		}
+		newEvents[day] = dayEvents;
+		this.setState({
+			selectedCard: undefined,
+			user:{
+				...this.state.user,
+				events:newEvents
+			}
+		})
+		getUserByNickname(this.props.user).then((json) => {
+			if( json.response === true ){
+				let { user } = json;
+				user.additionalData.events = this.state.user.events;
+				updateUserAdditionalData(user._id , user.additionalData ).then((value) => {
+					this.toggleDeleteModal()
+					console.log(value);
+					if( value.response !== true ){
+						alert("Error: Mira la consola para mas info")
+						console.log(json);
+					}
+				})
+			}else{
+				alert("Error: Mira la consola para mas info")
+				console.log(json);
+			}
+		})
+	}
+
+	handleDeleteAllEvents = () =>{
+		const { selectedCard:data , user:{ events } } = this.state;
+		let newEvents = {}
+		for (let v in events) {
+			let dayEvents = events[v]
+			let trash = []
+			for (let i = 0; i < dayEvents.length; i++) {
+				const event = dayEvents[i]
+				if( event.courseName === data.name ){
+					trash.push(i)
+				}
+			}
+			trash.reverse()
+			for (let i = 0; i < trash.length; i++) {
+				dayEvents.splice(trash[i],1)
+			}
+			newEvents[v] = dayEvents
+		}
+		this.setState({
+			selectedCard: undefined,
+			user:{
+				...this.state.user,
+				events:newEvents
+			}
+		})
+		getUserByNickname(this.props.user).then((json) => {
+			if( json.response === true ){
+				let { user } = json;
+				user.additionalData.events = this.state.user.events;
+				updateUserAdditionalData(user._id , user.additionalData ).then((value) => {
+					this.toggleDeleteModal()
+					console.log(value);
+					if( value.response !== true ){
+						alert("Error: Mira la consola para mas info")
+						console.log(json);
+					}
+				})
+			}else{
+				alert("Error: Mira la consola para mas info")
+				console.log(json);
+			}
+		})
+	}
+
+	handleDeleteCourseAndEvents = () =>{
+		const { selectedCard:data , user:{ events , courses } } = this.state;
+		let newEvents = {}
+		for (let v in events) {
+			let dayEvents = events[v]
+			let trash = []
+			for (let i = 0; i < dayEvents.length; i++) {
+				const event = dayEvents[i]
+				if( event.courseName === data.name ){
+					trash.push(i)
+				}
+			}
+			trash.reverse()
+			for (let i = 0; i < trash.length; i++) {
+				dayEvents.splice(trash[i],1)
+			}
+			newEvents[v] = dayEvents
+		}
+		let newCourses = []
+		for (let i = 0; i < courses.length; i++) {
+			const course = courses[i]
+			if( course.name !== data.name ){
+				newCourses.push(course)
+			}
+		}
+
+		this.setState({
+			selectedCard: undefined,
+			user:{
+				courses:newCourses,
+				events:newEvents
+			}
+		})
+		getUserByNickname(this.props.user).then((json) => {
+			if( json.response === true ){
+				let { user } = json;
+				user.additionalData.events = this.state.user.events;
+				user.additionalData.courses = this.state.user.courses;
+				updateUserAdditionalData(user._id , user.additionalData ).then((value) => {
+					this.toggleDeleteModal()
+					console.log(value);
+					if( value.response !== true ){
+						alert("Error: Mira la consola para mas info")
+						console.log(json);
+					}
+				})
+			}else{
+				alert("Error: Mira la consola para mas info")
+				console.log(json);
+			}
+		})
 	}
 
 	handleNewCourseChange = (e,data) =>{
@@ -175,7 +318,6 @@ class ScheduleBody extends React.Component{
 
 	handleSubmit = (e,data) =>{
 		var errors = validateEventForm(this.state.form)
-		this.updateErrors(errors)
 		if( errors.valid === true ){
 			const { form } = this.state
 			let course = {
@@ -248,6 +390,8 @@ class ScheduleBody extends React.Component{
 					console.log(json);
 				}
 			})
+		}else{
+			alert(errors.message)
 		}
 	}
 
@@ -347,6 +491,24 @@ class ScheduleBody extends React.Component{
 		)
 	}
 
+	sortSessions = ( sessions ) =>{
+		let copy = sessions;
+		for (let i = 0; i < copy.length - 1; i++) {
+			for (let j = i+1; j < copy.length; j++) {
+				let iS = Date.parse(`01/01/2013 ${copy[i].start}:00`)
+				//console.log(iS);
+				let jS = Date.parse(`01/01/2013 ${copy[j].start}:00`)
+				//console.log(jS);
+				if( jS < iS ){
+					let aux = copy[j];
+					copy[j] = copy[i];
+					copy[i] = aux;
+				}
+			}
+		}
+		return copy;
+	}
+
 	renderSchedule = () =>{
 		const { events } = this.state.user
 		if( events[this.currDay()] === undefined){
@@ -357,8 +519,16 @@ class ScheduleBody extends React.Component{
 					</Grid.Column>
 				</Grid.Row>
 			)
+		}else if( events[this.currDay()].length === 0 ){
+			return(
+				<Grid.Row centered>
+					<Grid.Column textAlign="center" width={14}>
+						¡Dia libre! No tienes eventos hoy
+					</Grid.Column>
+				</Grid.Row>
+			)
 		}else{
-			const sessions = events[this.currDay()]
+			const sessions = this.sortSessions(events[this.currDay()])
 			let cards = []
 			for (let i = 0; i < sessions.length; i++) {
 				const event = sessions[i]
@@ -374,7 +544,7 @@ class ScheduleBody extends React.Component{
 						end={end}
 						color={color}
 						description={description}
-						onClick={this.handleCardClick}
+						//onClick={this.handleCardClick}
 						onDelete={this.handleCardDelete}
 					/>
 				)
@@ -409,7 +579,8 @@ class ScheduleBody extends React.Component{
 	}
 
 	render(){
-		const { ready } = this.state
+		const { ready , selectedCard={} } = this.state
+		const { name='' } = selectedCard
 		if( ready === false){
 			return(
 				<Grid centered>
@@ -418,8 +589,8 @@ class ScheduleBody extends React.Component{
 			)
 		}else{
 			return(
-				<div>
-					<Grid padded centered columns={16}>
+				<div >
+					<Grid padded centered columns={16} style={{border:"none"}}>
 						<Grid.Row centered>
 							<Grid.Column verticalAlign={"middle"} textAlign='center' width={14} style={{maxWidth:350,userSelect:"none"}}>
 								<span>
@@ -436,14 +607,13 @@ class ScheduleBody extends React.Component{
 						</Grid.Row>
 					</Grid>
 
-					<FAB onClick={this.toggleEventModal}/>
 					<Modal
 						open={this.state.eventOpen}
 						onClose={this.handleCloseModal}
 						size="small"
 						closeIcon
 						>
-							<Modal.Content>
+							<Modal.Content scrolling>
 								<Form>
 									<Grid stackable padded columns={16}>
 										<Grid.Row centered>
@@ -507,7 +677,6 @@ class ScheduleBody extends React.Component{
 											</Grid.Column>
 										</Grid.Row>
 
-
 										{this.renderSesions()}
 
 										<Grid.Row centered>
@@ -533,6 +702,33 @@ class ScheduleBody extends React.Component{
 
 									</Grid>
 								</Form>
+							</Modal.Content>
+						</Modal>
+
+						<Modal
+							open={this.state.deleteOpen}
+							onClose={this.toggleDeleteModal}
+							size="small"
+							closeIcon
+						>
+							<Header>{`Eliminar Evento  de ${name}`}</Header>
+							<Modal.Content scrolling>
+								<Grid stackable centered padded columns={16}>
+									<Grid.Row>
+										¿Que deseas hacer?
+									</Grid.Row>
+									<Grid.Row centered >
+										<Grid.Column textAlign={"center"} computer={4} mobile={8}>
+											<Button color={"yellow"} content={"Borrar Solo este Evento"} onClick={this.handleDeleteSingleEvent}/>
+										</Grid.Column>
+										<Grid.Column textAlign={"center"} computer={4} mobile={8}>
+											<Button color={"orange"} content={"Borrar Todos los Eventos"} onClick={this.handleDeleteAllEvents}/>
+										</Grid.Column>
+										<Grid.Column textAlign={"center"} computer={4} mobile={8}>
+											<Button color={"red"} content={"Borrar Curso y Eventos"} onClick={this.handleDeleteCourseAndEvents}/>
+										</Grid.Column>
+									</Grid.Row>
+								</Grid>
 							</Modal.Content>
 						</Modal>
 					</div>

@@ -1,6 +1,5 @@
 import React from 'react'
 import AppContainer from './components/AppContainer'
-import CalculatorBody from './components/CalculatorBody'
 import FavoritesBody from './components/FavoritesBody'
 import HomeBody from './components/HomeBody'
 import LimitedCalculatorBody from './components/LimitedCalculatorBody'
@@ -47,8 +46,12 @@ class App extends React.Component{
 		this.onMenuItemClick("Registro",Pages.REGISTER );
 	}
 
-	handleMenuButton = ( has ) =>{
-		this.setState({ noButton : has })
+	handleMenuButton = ( has , right=false , onRight=undefined) =>{
+		this.setState({
+			noButton : has ,
+			rightButton: right ,
+			onRightClick:onRight
+		})
 	}
 
 	onSuccessfulSignin = ( user ) =>{
@@ -105,7 +108,7 @@ class App extends React.Component{
 					<Route exact path='/calcularRuta' render={ (props) => {return <RouteBody {...props} user={user} buildings={buildings} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/favoritos' render={ (props) => {return <FavoritesBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/horario' render={ (props) => {return <ScheduleBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
-					<Route exact path='/calculadora' render={ (props) => {return <CalculatorBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
+					<Route exact path='/calculadora' render={ (props) => {return <LimitedCalculatorBody {...props} user={user} handleMenuButton={handleMenuButton}/>} }/>
 					<Route exact path='/mapa' render={ (props) => {return <MapBody {...props} handleMenuButton={handleMenuButton} />} }/>
 					<Route render={ () => {return <Redirect to={'/home'}/>} }/>
 				</Switch>)
@@ -113,7 +116,7 @@ class App extends React.Component{
 	}
 
 	render(){
-		const { user , visible , noButton } = this.state;
+		const { user , visible , noButton , rightButton , onRightClick } = this.state;
 		const { onMenuItemClick , onToggleMenu , conditionalRendering } = this;
 		return(
 			<AppContainer
@@ -121,7 +124,10 @@ class App extends React.Component{
 				user={user}
 				visible={visible}
 				toggleMenu={onToggleMenu}
-				noButton={noButton} >
+				noButton={noButton}
+				rightButton={rightButton}
+				onRightClick={onRightClick}
+				>
 				<div style={ commonBackground }>
 					{conditionalRendering()}
 				</div>

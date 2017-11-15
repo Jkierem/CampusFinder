@@ -6,6 +6,15 @@ export const isAlphaNumeric = (string) =>{
   return /^[a-zA-Z0-9]+$/.test(string)
 }
 
+const isEmptyObj = (obj) => {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return JSON.stringify(obj) === JSON.stringify({});
+}
+
 export const isName = (string) =>{
   if( string.includes("'") ){
     var apos = string.split("'")
@@ -150,5 +159,66 @@ export const validateInputs = (values) =>{
 export const validateEventForm = (values) =>{
   let errors = {}
   errors.valid = true
+  errors.message = "Por favor, revise el formulario. Algunos datos faltan o son invalidos"
+  const {
+    disableSelection ,
+    sessions ,
+    newCourse ,
+    existingCourse ,
+    color ,
+    creds ,
+    description
+  } = values
+  if( disableSelection === true ){
+    if( newCourse === undefined ||
+        newCourse === '' ||
+        newCourse.trim() === '' ){
+      errors.valid = false
+    }
+    if( color === undefined ||
+        color === '' ){
+      errors.valid = false
+    }
+    if( description === undefined ||
+        description === '' ||
+        description.trim() === '' ){
+      errors.valid = false
+    }
+    if( creds === undefined ||
+        creds === '' ||
+        creds.trim() === '' ||
+        isNaN(creds) ||
+        parseInt(creds,10)< 1
+      ){
+      errors.valid = false
+    }
+  }else{
+    if( existingCourse === undefined ||
+        existingCourse === '' ){
+      errors.valid = false
+    }
+  }
+  for (let v in sessions) {
+    const { day , start , end } = sessions[v]
+    if( day === undefined || day === ''){
+      errors.valid = false
+    }
+    if( start === undefined || start === ''){
+      errors.valid = false
+    }
+    if( end === undefined || end === ''){
+      errors.valid = false
+    }
+    if( end !== undefined && start !== undefined){
+      let sDate = Date.parse(`01/01/2013 ${start}:00`)
+      let eDate = Date.parse(`01/01/2013 ${end}:00`)
+      if( sDate > eDate ){
+        errors.valid = false
+      }
+    }
+  }
+  if( isEmptyObj(sessions) ){
+    errors.valid = false
+  }
   return errors
 }
