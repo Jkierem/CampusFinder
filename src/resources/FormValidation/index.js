@@ -85,16 +85,17 @@ export const validateRegister = (values) =>{
     errors.email = "Correo electronico no es valido"
     errors.valid = false
   }
-  if( password !== passwordConfirm ){
-    errors.confirm = "Las contraseñas no coinciden"
-    errors.valid = false
-  }
-  if( password === undefined ){
+
+  if( password === undefined || password === "" ){
     errors.password = "Contraseña no puede estar vacía"
     errors.valid = false
   }else{
     if( password.includes(" ") === true ){
       errors.password = "Contraseña no debe contener espacios"
+      errors.valid = false
+    }
+    if( password !== passwordConfirm ){
+      errors.confirm = "Las contraseñas no coinciden"
       errors.valid = false
     }
   }

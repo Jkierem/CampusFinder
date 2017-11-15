@@ -22,6 +22,9 @@ class RegisterBody extends React.Component{
 
 	componentWillMount = () =>{
 		this.props.handleMenuButton(false)
+		this.setState({
+			username: this.props.username
+		})
 	}
 
 	checkInputs = () =>{
@@ -48,6 +51,10 @@ class RegisterBody extends React.Component{
 	}
 
 	handleChange = (e, { name, value }) => {
+		this.setState({ [name]: value.trim() })
+	}
+
+	handlePassChange = ( e, {name ,value}) =>{
 		this.setState({ [name]: value })
 	}
 
@@ -144,7 +151,7 @@ class RegisterBody extends React.Component{
 							<Form.Field>
 								<Input
 									placeholder={'Contraseña'}
-									onChange={this.handleChange}
+									onChange={this.handlePassChange}
 									name={"password"}
 									type={'password'}
 									style={getErrorStyle(passError)}
@@ -159,7 +166,7 @@ class RegisterBody extends React.Component{
 							<Form.Field>
 								<Input
 									placeholder={'Confirmar Contraseña'}
-									onChange={this.handleChange}
+									onChange={this.handlePassChange}
 									name={"passwordConfirm"}
 									type={'password'}
 									style={getErrorStyle(confirmError)}

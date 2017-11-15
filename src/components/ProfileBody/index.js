@@ -74,6 +74,10 @@ class ProfileBody extends React.Component{
 		})
 	}
 
+	handleChangeWithTrim = (e, { name, value }) => {
+		this.setState({ [name]: value })
+	}
+
 	handleChange = (e, { name, value }) => {
 		this.setState({ [name]: value })
 	}
@@ -189,7 +193,7 @@ class ProfileBody extends React.Component{
 								<Input
 									defaultValue={email}
 									name={"email"}
-									onChange={this.handleChange}
+									onChange={this.handleChangeWithTrim}
 								/>
 							</Grid.Column>
 						</Grid.Row>
@@ -242,6 +246,7 @@ class ProfileBody extends React.Component{
 												placeholder={"Contraseña actual"}
 												name={"currentPassword"}
 												onChange={this.handleChange}
+												type={"password"}
 												style={getErrorStyle(this.state.currentPasswordError)}
 											/>
 											{ this.state.currentPasswordError && <ErrorText text={this.state.currentPasswordErrorText}/>}
@@ -255,6 +260,7 @@ class ProfileBody extends React.Component{
 												placeholder={"Nueva contraseña"}
 												name={"newPassword"}
 												onChange={this.handleChange}
+												type={"password"}
 												style={getErrorStyle(this.state.newPasswordError)}
 											/>
 											{ this.state.newPasswordError && <ErrorText text={this.state.newPasswordErrorText}/>}
@@ -268,6 +274,7 @@ class ProfileBody extends React.Component{
 												placeholder={"Confirmar contraseña"}
 												name={"confirmPassword"}
 												onChange={this.handleChange}
+												type={"password"}
 												style={getErrorStyle(this.state.confirmPasswordError)}
 											/>
 											{ this.state.confirmPasswordError && <ErrorText text={this.state.confirmPasswordErrorText}/>}
@@ -300,6 +307,7 @@ class ProfileBody extends React.Component{
 											placeholder={"Contraseña actual"}
 											name={"safetyPassword"}
 											onChange={this.handleChange}
+											type={"password"}
 											style={getErrorStyle(this.state.safetyError)}
 										/>
 								</Grid.Row>
